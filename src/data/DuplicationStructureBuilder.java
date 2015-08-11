@@ -14,7 +14,7 @@ public class DuplicationStructureBuilder {
     private HashRelatedFileStorage hashRelatedFileStorage = new HashRelatedFileStorage();
     private final FileSystem root;
     private Map<FileSystem, Directory> fileSystemDirectoryMap = new HashMap<>();
-    private Map<FileSystem, Directory> fileSystemDirectoryMapBackup = new HashMap<>();
+    private boolean backedUp = false;
 
     /**
      * @param root
@@ -27,16 +27,17 @@ public class DuplicationStructureBuilder {
     }
 
     public void backup() {
-        //TODO implement this
-        hashRelatedFileStorage.backup();
-        fileSystemDirectoryMapBackup = new HashMap<>(fileSystemDirectoryMap);
+        backedUp = true;
     }
 
     public void restore() {
-        //TODO implement this
-        hashRelatedFileStorage.restore();
-        fileSystemDirectoryMap = fileSystemDirectoryMapBackup;
-        fileSystemDirectoryMapBackup = null;
+        backedUp = false;
+        rebuild();
+        root.resetFlags();
+    }
+
+    public boolean isBackedUp() {
+        return backedUp;
     }
 
     private Directory traverseToRoot(FileSystem fileSystem) {
@@ -67,7 +68,7 @@ public class DuplicationStructureBuilder {
         fileSystemDirectoryMap.put(root, new Directory(root));
         traverseDown(root);
         // it is rebuilt but there might be single files in it
-        hashRelatedFileStorage.getSingles().forEach(f->f.hide());
+        hashRelatedFileStorage.getSingles().forEach(f -> f.hide());
     }
 
     private void traverseDown(FileSystem fileSystem) {

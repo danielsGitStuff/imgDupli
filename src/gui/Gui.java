@@ -205,8 +205,6 @@ public class Gui {
 		gbc_pnlNorth.gridy = 0;
 		JScrollPane scrollPaneNorth = new JScrollPane(pnlNorth);
 
-		pnlNorth.setBackground(Color.cyan);
-
 		pnlSouth = new JPanel();
 		GridBagLayout gbl_pnlSouth = new GridBagLayout();
 		gbl_pnlSouth.columnWeights = new double[] {};
@@ -221,6 +219,7 @@ public class Gui {
 		scrollPaneSouth = new JScrollPane(pnlSouth);
 		// pnlImagePresentation.add(scrollPaneSouth, gbc_scrollPaneSouth);
 		pnlImagePresentation = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPaneNorth, scrollPaneSouth);
+		pnlImagePresentation.setResizeWeight(.5d);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, pnlImagePresentation);
 		GridBagConstraints gbc_splitPane = new GridBagConstraints();
 		gbc_splitPane.anchor = GridBagConstraints.NORTH;

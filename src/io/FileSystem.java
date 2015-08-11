@@ -145,4 +145,9 @@ public class FileSystem {
 			// checkRemoval();
 		}
 	}
+
+	public void resetFlags() {
+		files.forEach((str, customFile) -> customFile.resetFlags());
+		directories.forEach((str, fileSystem) -> fileSystem.resetFlags());
+	}
 }

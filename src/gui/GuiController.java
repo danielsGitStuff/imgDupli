@@ -133,6 +133,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         presenter.disableWrite();
     }
 
+
     @Override
     public void onFileDeleteFilesEverywhereElse(LeFile leFile) {
         leFile.getCustomFile().setMarkedForDeletion(true);
@@ -144,7 +145,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
                 f.getCustomFile().setMarkedForDeletion(true);
             }
         });
-        presenter.geraffel(structureBuilder);
+        presenter.geruffel();
         presenter.enableWrite();
     }
 
@@ -153,7 +154,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         leFile.getCustomFile().setMarkedForDeletion(true);
         leFile.hide();
         structureBuilder.getHashRelatedFileStorage().removeFile(leFile);
-        presenter.geraffel(structureBuilder);
+        presenter.geruffel();
         presenter.enableWrite();
     }
 
@@ -170,7 +171,6 @@ public class GuiController implements IGuiController, IGuiEventHandler {
             });
             ;
         });
-       // presenter.geraffel(structureBuilder);
         presenter.geruffel();
         presenter.enableWrite();
     }
@@ -187,7 +187,6 @@ public class GuiController implements IGuiController, IGuiEventHandler {
             });
             ;
         });
-       // presenter.geraffel(structureBuilder);
         presenter.geruffel();
         presenter.enableWrite();
     }

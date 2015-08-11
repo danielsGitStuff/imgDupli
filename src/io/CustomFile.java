@@ -86,4 +86,8 @@ public class CustomFile extends File {
 			directory.removeCustomFile(this);
 		}
 	}
+
+	public void resetFlags() {
+		markedForDeletion = false;
+	}
 }
