@@ -84,7 +84,7 @@ public class Gui {
 		pnlSettings.add(btnPath, gbc_btnPath);
 
 		txtPath = new JTextField();
-		txtPath.setText("~/Documents");
+		txtPath.setText("C:\\Users\\xor\\picTest");
 		GridBagConstraints gbc_txtPath = new GridBagConstraints();
 		gbc_txtPath.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtPath.anchor = GridBagConstraints.WEST;

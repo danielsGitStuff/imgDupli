@@ -121,7 +121,8 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     @Override
     public void onBtnRevertClicked() {
         structureBuilder.restore();
-        presenter.geraffel(structureBuilder);
+        presenter.geruffel();
+//        presenter.geraffel(structureBuilder);
         presenter.disableWrite();
     }
 
@@ -129,7 +130,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     public void onBtnWriteClicked() {
         structureBuilder.getRoot().write();
         structureBuilder.rebuild();
-        presenter.geraffel(structureBuilder);
+//        presenter.geraffel(structureBuilder);
         presenter.disableWrite();
     }
 

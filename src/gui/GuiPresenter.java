@@ -48,6 +48,9 @@ public class GuiPresenter {
     }
 
     public void geruffel(){
+        System.out.println("GuiPresenter.geruffel!!!");
+        OTreeNode rootNode = (OTreeNode) gui.getTree().getModel().getRoot();
+        rootNode.check();
         gui.getTree().updateUI();
     }
 

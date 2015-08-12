@@ -11,7 +11,7 @@ import java.util.concurrent.FutureTask;
 
 public class ImagePanelController implements IImageLoadRequestListener {
 	private ExecutorService executor;
-	private final Map<ImagePanel, FutureTask<Object>> oldeRequests = new ConcurrentHashMap<>();
+	private Map<ImagePanel, FutureTask<Object>> oldeRequests = new ConcurrentHashMap<>();
 
 	public ImagePanelController() {
 		this.executor = Executors.newWorkStealingPool();
@@ -20,6 +20,7 @@ public class ImagePanelController implements IImageLoadRequestListener {
 	public void reset() {
 		executor.shutdownNow();
 		executor = Executors.newWorkStealingPool();
+		oldeRequests = new ConcurrentHashMap<>();
 	}
 
 	public ImagePanel createImagePanel(File file) {

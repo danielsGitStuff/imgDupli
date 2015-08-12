@@ -117,19 +117,17 @@ public class FileSystem {
 			CustomFile file = files.get(hash);
 			file.write();
 		});
-		// files.forEach((hash, file) -> file.write());
 		Set<String> dirKeySet = new HashSet<>(directories.keySet());
 		dirKeySet.forEach(path -> {
 			FileSystem fileSystem = directories.get(path);
 			fileSystem.write();
 		});
-//		directories.forEach((name, fileSytem) -> fileSytem.write());
 		checkRemoval();
 	}
 
 	public void removeCustomFile(CustomFile customFile) {
 		files.remove(customFile.getName());
-		// checkRemoval();
+		checkRemoval();
 	}
 
 	private void checkRemoval() {
@@ -142,7 +140,7 @@ public class FileSystem {
 		// we want root to stay here
 		if (parent != null) {
 			directories.remove(fileSystem.getPath());
-			// checkRemoval();
+			checkRemoval();
 		}
 	}
 
