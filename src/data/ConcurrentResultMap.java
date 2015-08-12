@@ -36,9 +36,6 @@ public class ConcurrentResultMap extends ConcurrentHashMap<String, File> {
 				list.add(value);
 			}
 			remove(key);
-            //	if (searchController != null) {
-            //		searchController.onFoundDuplicate(key, value);
-            //	}
         }
 		return super.put(key, value);
 	}
