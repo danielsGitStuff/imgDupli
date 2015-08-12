@@ -2,7 +2,6 @@ package gui;
 
 import data.Directory;
 import data.LeFile;
-import image.ImagePanel;
 import interfaces.IGuiEventHandler;
 import main.Settings;
 import tree.OJTree;
@@ -27,20 +26,18 @@ public class Gui {
     final JPanel canvas = new JPanel();
     final JSplitPane spTreeImages;
     final JScrollPane scrollPaneTree;
-
-    JTextField txtPath;
     final JTextField txtFileThreadRatio;
     final JTextField txtFileTypes;
-    JProgressBar progressBar;
-    JButton btnStop;
-
-    JButton btnRevert;
-    IGuiEventHandler eventHandler;
     final JSplitPane spImages;
     final OJTree tree;
     final JPanel pnlSouth;
     final JPanel pnlNorth;
     final JScrollPane scrollPaneSouth;
+    JTextField txtPath;
+    JProgressBar progressBar;
+    JButton btnStop;
+    JButton btnRevert;
+    IGuiEventHandler eventHandler;
     JPanel pnlSettings;
     JButton btnStart;
     JButton btnWrite;
@@ -124,18 +121,12 @@ public class Gui {
         pnlSettings.add(txtFileThreadRatio, gbc_txtFileThreadRatio);
         txtFileThreadRatio.setColumns(5);
 
-        JCheckBox cbCacheImage = new JCheckBox("image.cache");
-        GridBagConstraints gbcCBCache = new GridBagConstraints();
-        gbcCBCache.gridx = 4;
-        gbcCBCache.gridy = 0;
-        cbCacheImage.setSelected(ImagePanel.CACHE_IMAGE);
-        cbCacheImage.addActionListener((e) -> ImagePanel.CACHE_IMAGE = !ImagePanel.CACHE_IMAGE);
-        pnlSettings.add(cbCacheImage, gbcCBCache);
+
 
         JLabel lblNewLabel_1 = new JLabel("file types");
         GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
         gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
-        gbc_lblNewLabel_1.gridx = 5;
+        gbc_lblNewLabel_1.gridx = 4;
         gbc_lblNewLabel_1.gridy = 0;
         pnlSettings.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
@@ -143,7 +134,7 @@ public class Gui {
         txtFileTypes.setText("jpg,jpeg,png,bmp,psd");
         GridBagConstraints gbc_txtFileTypes = new GridBagConstraints();
         gbc_txtFileTypes.fill = GridBagConstraints.HORIZONTAL;
-        gbc_txtFileTypes.gridx = 6;
+        gbc_txtFileTypes.gridx = 5;
         gbc_txtFileTypes.gridy = 0;
         pnlSettings.add(txtFileTypes, gbc_txtFileTypes);
         txtFileTypes.setColumns(10);
@@ -169,7 +160,6 @@ public class Gui {
         gbc_btnWrite.fill = GridBagConstraints.HORIZONTAL;
         gbc_btnWrite.gridx = 5;
         gbc_btnWrite.gridy = 1;
-        gbc_btnWrite.gridwidth = 2;
         pnlSettings.add(btnWrite, gbc_btnWrite);
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
