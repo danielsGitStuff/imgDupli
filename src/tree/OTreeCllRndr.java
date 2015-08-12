@@ -1,4 +1,4 @@
-package gui;
+package tree;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,7 +13,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import io.FSRelated;
 
-class OTreeCllRndr extends DefaultTreeCellRenderer {
+public class OTreeCllRndr extends DefaultTreeCellRenderer {
 
 	private static final Color DEFAULT_FOREGROUND = Color.BLACK;
 	private static final Color SELECTED_FOREGROUND = new Color(180, 0, 0);

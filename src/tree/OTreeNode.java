@@ -1,11 +1,8 @@
-package gui;
+package tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import data.Directory;
-import data.LeFile;
-import io.CustomFile;
 import io.FSRelated;
 
 import java.util.Vector;

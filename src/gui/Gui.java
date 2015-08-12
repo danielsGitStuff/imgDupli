@@ -5,6 +5,8 @@ import data.LeFile;
 import image.ImagePanel;
 import interfaces.IGuiEventHandler;
 import main.Settings;
+import tree.OJTree;
+import tree.OTreeCllRndr;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
@@ -21,18 +23,28 @@ import java.util.stream.Collectors;
 
 public class Gui {
 
-    private final JFrame frame = new JFrame();
-    private final JPanel canvas = new JPanel();
-    private final JSplitPane spTreeImages;
+    final JFrame frame = new JFrame();
+    final JPanel canvas = new JPanel();
+    final JSplitPane spTreeImages;
+    final JScrollPane scrollPaneTree;
 
-    private JTextField txtPath;
-    private final JTextField txtFileThreadRatio;
-    private final JTextField txtFileTypes;
-    private JProgressBar progressBar;
-    private JButton btnStop;
+    JTextField txtPath;
+    final JTextField txtFileThreadRatio;
+    final JTextField txtFileTypes;
+    JProgressBar progressBar;
+    JButton btnStop;
 
-    private JButton btnRevert;
-    private IGuiEventHandler eventHandler;
+    JButton btnRevert;
+    IGuiEventHandler eventHandler;
+    final JSplitPane spImages;
+    final OJTree tree;
+    final JPanel pnlSouth;
+    final JPanel pnlNorth;
+    final JScrollPane scrollPaneSouth;
+    JPanel pnlSettings;
+    JButton btnStart;
+    JButton btnWrite;
+    JPanel pnlViewContainer;
 
     public Gui(IGuiEventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -157,7 +169,7 @@ public class Gui {
         gbc_btnWrite.fill = GridBagConstraints.HORIZONTAL;
         gbc_btnWrite.gridx = 5;
         gbc_btnWrite.gridy = 1;
-        gbc_btnWrite.gridwidth=2;
+        gbc_btnWrite.gridwidth = 2;
         pnlSettings.add(btnWrite, gbc_btnWrite);
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -200,7 +212,7 @@ public class Gui {
         gbc_tree.fill = GridBagConstraints.BOTH;
         gbc_tree.gridx = 0;
         gbc_tree.gridy = 0;
-        JScrollPane scrollPaneTree = new JScrollPane(tree);
+        scrollPaneTree = new JScrollPane(tree);
 
         pnlNorth = new JPanel();
         GridBagLayout gbl_pnlNorth = new GridBagLayout();
@@ -231,7 +243,10 @@ public class Gui {
         // spImages.add(scrollPaneSouth, gbc_scrollPaneSouth);
         spImages = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPaneNorth, scrollPaneSouth);
         spImages.setResizeWeight(.5d);
-        spTreeImages = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, spImages);
+        pnlViewContainer = new JPanel();
+        pnlViewContainer.setLayout(new BorderLayout());
+        pnlViewContainer.add(spImages);
+        spTreeImages = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, pnlViewContainer);
         GridBagConstraints gbc_splitPane = new GridBagConstraints();
         gbc_splitPane.anchor = GridBagConstraints.NORTH;
         gbc_splitPane.weighty = 1.0;
@@ -294,14 +309,6 @@ public class Gui {
         return result;
     }
 
-    private final JSplitPane spImages;
-    private final OJTree tree;
-    private final JPanel pnlSouth;
-    private final JPanel pnlNorth;
-    private final JScrollPane scrollPaneSouth;
-    private JPanel pnlSettings;
-    private JButton btnStart;
-    private JButton btnWrite;
 
     public void setTreeModel(TreeModel treeModel) {
         tree.setModel(treeModel);
@@ -317,21 +324,6 @@ public class Gui {
         });
     }
 
-    public JSplitPane getSpImages() {
-        return spImages;
-    }
-
-    public JPanel getPnlNorth() {
-        return pnlNorth;
-    }
-
-    public JPanel getPnlSouth() {
-        return pnlSouth;
-    }
-
-    public JScrollPane getScrollPaneSouth() {
-        return scrollPaneSouth;
-    }
 
     public void showProgressStuff() {
         pnlSettings.remove(btnStart);
@@ -351,9 +343,6 @@ public class Gui {
         pnlSettings.repaint();
     }
 
-    public JProgressBar getProgressBar() {
-        return progressBar;
-    }
 
     public void hideProgressStuff() {
         pnlSettings.remove(btnStop);
@@ -366,10 +355,6 @@ public class Gui {
         pnlSettings.add(btnStart, gbc);
         pnlSettings.validate();
         pnlSettings.repaint();
-    }
-
-    public OJTree getTree() {
-        return tree;
     }
 
     public void enableWrite() {
@@ -392,4 +377,19 @@ public class Gui {
         frame.setTitle(windowTitle);
     }
 
+    public JPanel getPnlNorth() {
+        return pnlNorth;
+    }
+
+    public JPanel getPnlSouth() {
+        return pnlSouth;
+    }
+
+    public JScrollPane getScrollPaneSouth() {
+        return scrollPaneSouth;
+    }
+
+    public JSplitPane getSpImages() {
+        return spImages;
+    }
 }

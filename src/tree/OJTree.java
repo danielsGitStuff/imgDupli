@@ -1,4 +1,4 @@
-package gui;
+package tree;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -7,7 +7,7 @@ import javax.swing.tree.TreeNode;
 import io.CustomFile;
 import io.FileSystem;
 
-class OJTree extends JTree {
+public class OJTree extends JTree {
 	
 	
 	

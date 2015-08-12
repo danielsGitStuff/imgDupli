@@ -21,11 +21,9 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     private final GuiPresenter presenter;
     private SearchController searchController;
     private DuplicationStructureBuilder structureBuilder;
-    private final ImagefolderPanelPresenter imagefolderPanelPresenter;
 
     public GuiController() {
         this.presenter = new GuiPresenter(this);
-        imagefolderPanelPresenter = presenter.getImagefolderPanelPresenter();
     }
 
     public void setSearchController(SearchController searchController) {
@@ -61,7 +59,6 @@ public class GuiController implements IGuiController, IGuiEventHandler {
 
     void handleDirSelection(Directory directory) {
         structureBuilder.resetHighlighted();
-        imagefolderPanelPresenter.reset();
         List<LeFile> duplicates = new ArrayList<>();
         HashSet<String> hashes = directory.getHashes();
         hashes.forEach(hash -> {
@@ -72,10 +69,9 @@ public class GuiController implements IGuiController, IGuiEventHandler {
                 duplicates.add(f);
             }
         });
-        imagefolderPanelPresenter.setDuplicates(duplicates);
         FileSystem fileSystem = directory.getFileSystem();
         File[] images = fileSystem.getFile().listFiles(searchController.getSettings().getInterestingFileFilter());
-        imagefolderPanelPresenter.setFolderImages(images);
+        presenter.showFolder(duplicates, images);
     }
 
     @Override

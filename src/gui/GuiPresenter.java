@@ -13,6 +13,10 @@ import image.ImagePanel;
 import image.ImagePanelController;
 import image.ImagefolderPanelPresenter;
 import main.Settings;
+import tree.OTreeNode;
+
+import java.io.File;
+import java.util.List;
 
 public class GuiPresenter {
 
@@ -37,10 +41,6 @@ public class GuiPresenter {
         gui.show();
     }
 
-    public ImagefolderPanelPresenter getImagefolderPanelPresenter() {
-        return imagefolderPanelPresenter;
-    }
-
     public void geraffel(DuplicationStructureBuilder structureBuilder) {
         OTreeNode rootNode = new OTreeNode(structureBuilder.getRootDirectory());
         Directory rootDirectory = structureBuilder.getRootDirectory();
@@ -53,9 +53,9 @@ public class GuiPresenter {
 
     public void geruffel() {
         System.out.println("GuiPresenter.geruffel!!!");
-        OTreeNode rootNode = (OTreeNode) gui.getTree().getModel().getRoot();
+        OTreeNode rootNode = (OTreeNode) gui.tree.getModel().getRoot();
         rootNode.check();
-        gui.getTree().updateUI();
+        gui.tree.updateUI();
     }
 
     private void fillNodes(Directory directory, OTreeNode node) {
@@ -88,15 +88,12 @@ public class GuiPresenter {
     }
 
     public void showSingleImage(LeFile file) {
-        JSplitPane spTreeImages = gui.getSpTreeImages();
-        JSplitPane spImages = gui.getSpImages();
-        if (spTreeImages.isAncestorOf(spImages)) {
-            spTreeImages.remove(spImages);
-            ImagePanel imagePanel = imagePanelController.createImagePanel(file.getCustomFile());
-            spTreeImages.add(imagePanel);
-        }
+        gui.pnlViewContainer.removeAll();
+        imagePanelController.reset();
+        ImagePanel imagePanel = imagePanelController.createImagePanel(file.getCustomFile());
+        gui.pnlViewContainer.add(imagePanel);
+        gui.pnlViewContainer.updateUI();
     }
-
     public void hideProgressStuff() {
         gui.hideProgressStuff();
     }
@@ -116,13 +113,25 @@ public class GuiPresenter {
     }
 
     public void showFoundFilesCount(int foundFilesCount) {
-        gui.getProgressBar().setMaximum(foundFilesCount);
-        gui.getProgressBar().repaint();
+        gui.progressBar.setMaximum(foundFilesCount);
+        gui.progressBar.repaint();
         gui.setWindowTitle(foundFilesCount + " files found");
     }
 
     public void showFilesProcessed(int filesHashedCount) {
-        gui.getProgressBar().setValue(filesHashedCount);
-        gui.getProgressBar().repaint();
+        gui.progressBar.setValue(filesHashedCount);
+        gui.progressBar.repaint();
+    }
+
+
+    public void showFolder(List<LeFile> duplicates, File[] otherImages) {
+        //configure GUI
+        gui.pnlViewContainer.removeAll();
+        gui.pnlViewContainer.add(gui.spImages);
+        gui.pnlViewContainer.repaint();
+
+        imagefolderPanelPresenter.reset();
+        imagefolderPanelPresenter.setDuplicates(duplicates);
+        imagefolderPanelPresenter.setFolderImages(otherImages);
     }
 }
