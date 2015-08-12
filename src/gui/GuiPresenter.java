@@ -1,5 +1,6 @@
 package gui;
 
+import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
@@ -8,6 +9,8 @@ import javax.swing.tree.TreeModel;
 import data.Directory;
 import data.DuplicationStructureBuilder;
 import data.LeFile;
+import image.ImagePanel;
+import image.ImagePanelController;
 import image.ImagefolderPanelPresenter;
 import main.Settings;
 
@@ -17,6 +20,7 @@ public class GuiPresenter {
     private final Gui gui;
     private ListSelectionListener listSelectionListener;
     private final ImagefolderPanelPresenter imagefolderPanelPresenter;
+    private final ImagePanelController imagePanelController = new ImagePanelController();
 
     public GuiPresenter(GuiController controller) {
         this.controller = controller;
@@ -47,7 +51,7 @@ public class GuiPresenter {
         gui.setTreeModel(treeModel);
     }
 
-    public void geruffel(){
+    public void geruffel() {
         System.out.println("GuiPresenter.geruffel!!!");
         OTreeNode rootNode = (OTreeNode) gui.getTree().getModel().getRoot();
         rootNode.check();
@@ -80,6 +84,16 @@ public class GuiPresenter {
             controller.handleDirSelection((Directory) userObject);
         } else if (userObject instanceof LeFile) {
             controller.handleFileSelection((LeFile) userObject);
+        }
+    }
+
+    public void showSingleImage(LeFile file) {
+        JSplitPane spTreeImages = gui.getSpTreeImages();
+        JSplitPane spImages = gui.getSpImages();
+        if (spTreeImages.isAncestorOf(spImages)) {
+            spTreeImages.remove(spImages);
+            ImagePanel imagePanel = imagePanelController.createImagePanel(file.getCustomFile());
+            spTreeImages.add(imagePanel);
         }
     }
 

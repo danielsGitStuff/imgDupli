@@ -56,6 +56,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         structureBuilder.resetHighlighted();
         HashSet<LeFile> relatedFiles = structureBuilder.getHashRelatedFileStorage().get(file.getHash());
         relatedFiles.forEach(this::highlightFile);
+        presenter.showSingleImage(file);
     }
 
     void handleDirSelection(Directory directory) {

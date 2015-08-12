@@ -15,8 +15,6 @@ import javax.swing.*;
 
 import data.LeFile;
 import gui.Gui;
-import image.ImagePanel;
-import image.ImagePanelController;
 import interfaces.IGuiEventHandler;
 import io.CustomFile;
 
@@ -37,7 +35,7 @@ public class ImagefolderPanelPresenter {
         this.pnlNorth = gui.getPnlNorth();
         this.pnlSouth = gui.getPnlSouth();
         this.scrollPaneSouth = gui.getScrollPaneSouth();
-        this.container = gui.getPnlImagePresentation();
+        this.container = gui.getSpImages();
         this.gui = gui;
         this.eventHandler = eventHandler;
     }
@@ -123,7 +121,7 @@ public class ImagefolderPanelPresenter {
         folderImagesRowCount =0;
         pnlSouth.removeAll();
         Arrays.stream(images).forEach(f -> addImage(pnlSouth, f));
-        gui.getPnlImagePresentation().validate();
+        gui.getSpImages().validate();
         pnlSouth.validate();
         pnlSouth.repaint();
     }
