@@ -1,9 +1,10 @@
 package data;
 
+import interfaces.IFileRepresentation;
 import io.CustomFile;
 import io.FSRelated;
 
-public class LeFile extends FSRelated {
+public class LeFile extends FSRelated implements IFileRepresentation {
 	private CustomFile customFile;
 	private Directory directory;
 
@@ -12,12 +13,12 @@ public class LeFile extends FSRelated {
 		this.customFile = customFile;
 	}
 
-	public void setDirectory(Directory directory) {
-		this.directory = directory;
-	}
-
 	public Directory getDirectory() {
 		return directory;
+	}
+
+	public void setDirectory(Directory directory) {
+		this.directory = directory;
 	}
 
 	public String getHash() {
@@ -42,6 +43,12 @@ public class LeFile extends FSRelated {
 	public void hide() {
 		super.hide();
 		directory.removeLeFile(this);
+	}
+
+	public void cleanGraph() {
+		if (!customFile.exists() || customFile.isMarkedForDeletion()) {
+			hide();
+		}
 	}
 
 }

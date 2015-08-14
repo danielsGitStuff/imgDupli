@@ -1,11 +1,9 @@
 package data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
-import io.CustomFile;
-import io.FileSystem;
 import io.FSRelated;
+import io.FileSystem;
+
+import java.util.HashSet;
 
 public class Directory extends FSRelated {
     private Directory parentDirectory;
@@ -29,12 +27,12 @@ public class Directory extends FSRelated {
         subDirectories.add(subDir);
     }
 
-    public void setParentDirectory(Directory parentDirectory) {
-        this.parentDirectory = parentDirectory;
-    }
-
     public Directory getParentDirectory() {
         return parentDirectory;
+    }
+
+    public void setParentDirectory(Directory parentDirectory) {
+        this.parentDirectory = parentDirectory;
     }
 
     @Override
@@ -61,6 +59,14 @@ public class Directory extends FSRelated {
         HashSet<String> result = new HashSet<>();
         leFiles.stream().filter(f -> !f.isHidden()).forEach(leFile -> result.add(leFile.getHash()));
         return result;
+    }
+
+    public void cleanGraph() {
+        HashSet<LeFile> files = (HashSet<LeFile>) this.leFiles.clone();
+        files.forEach(f -> f.cleanGraph());
+        HashSet<Directory> directories = (HashSet<Directory>) this.subDirectories.clone();
+        directories.forEach(d -> d.cleanGraph());
+        checkRemoval();
     }
 
     public void removeLeFile(LeFile leFile) {

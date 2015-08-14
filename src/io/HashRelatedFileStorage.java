@@ -1,63 +1,72 @@
 package io;
 
+import interfaces.IFileRepresentation;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import data.LeFile;
+public class HashRelatedFileStorage<T extends IFileRepresentation> {
+    private Map<String, HashSet<T>> hashLeFileMap = new HashMap<>();
+    private Map<String, HashSet<T>> backup = new HashMap<>();
 
-public class HashRelatedFileStorage {
-    private Map<String, HashSet<LeFile>> hashFileMap = new HashMap<>();
-    private Map<String, HashSet<LeFile>> backup = new HashMap<>();
-
-    public void put(String hash, LeFile file) {
-        if (hashFileMap.containsKey(hash)) {
-            hashFileMap.get(hash).add(file);
+    public void put(String hash, T file) {
+        if (hashLeFileMap.containsKey(hash)) {
+            hashLeFileMap.get(hash).add(file);
         } else {
-            HashSet<LeFile> HashSet = new HashSet<>();
+            HashSet<T> HashSet = new HashSet<>();
             HashSet.add(file);
-            hashFileMap.put(hash, HashSet);
+            hashLeFileMap.put(hash, HashSet);
         }
     }
 
-    public HashSet<LeFile> getSingles() {
-        HashSet<LeFile> result = new HashSet<>();
-        hashFileMap.forEach((hash, files) -> {
+    public HashSet<T> getSingles() {
+        HashSet<T> result = new HashSet<>();
+        hashLeFileMap.forEach((hash, files) -> {
             if (files.size() < 2)
                 result.addAll(files);
         });
         return result;
     }
 
-    public HashSet<LeFile> get(String hash) {
-        if (hashFileMap.containsKey(hash)) {
-            HashSet<LeFile> result = (HashSet<LeFile>) hashFileMap.get(hash);
+    public HashSet<T> get(String hash) {
+        if (hashLeFileMap.containsKey(hash)) {
+            HashSet<T> result = (HashSet<T>) hashLeFileMap.get(hash);
             if (result != null)
-                return (HashSet<LeFile>) result.clone();
+                return (HashSet<T>) result.clone();
         }
         return null;
     }
 
+    public boolean atLeastTwoCopies(String hash) {
+        HashSet<T> result = get(hash);
+        if (result == null)
+            return false;
+        if (result.size() > 1)
+            return true;
+        return false;
+    }
+
     public void backup() {
         backup = new HashMap<>();
-        hashFileMap.forEach((hash, hashset) -> {
+        hashLeFileMap.forEach((hash, hashset) -> {
             backup.put(hash, new HashSet<>(hashset));
         });
 
     }
 
     public void restore() {
-        hashFileMap = backup;
+        hashLeFileMap = backup;
         backup = null;
     }
 
-    public void removeFile(LeFile leFile) {
-        HashSet<LeFile> copies = hashFileMap.get(leFile.getHash());
+    public void removeFile(T leFile) {
+        HashSet<T> copies = hashLeFileMap.get(leFile.getHash());
         if (copies != null) {
             copies.remove(leFile);
             if (copies.size() < 2) {
                 copies.forEach(f -> f.hide());
-                hashFileMap.remove(leFile.getHash());
+                hashLeFileMap.remove(leFile.getHash());
             }
         }
     }

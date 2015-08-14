@@ -1,20 +1,19 @@
 package gui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import data.ConcurrentResultMap;
 import data.Directory;
 import data.DuplicationStructureBuilder;
 import data.LeFile;
-import image.ImagefolderPanelPresenter;
 import interfaces.IGuiController;
 import interfaces.IGuiEventHandler;
 import io.FileSystem;
 import main.SearchController;
 import main.Settings;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class GuiController implements IGuiController, IGuiEventHandler {
 
@@ -52,7 +51,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
 
     void handleFileSelection(LeFile file) {
         structureBuilder.resetHighlighted();
-        HashSet<LeFile> relatedFiles = structureBuilder.getHashRelatedFileStorage().get(file.getHash());
+        HashSet<LeFile> relatedFiles = structureBuilder.getHashRelatedLeFiles(file.getHash());
         relatedFiles.forEach(this::highlightFile);
         presenter.showSingleImage(file);
     }
@@ -62,7 +61,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         List<LeFile> duplicates = new ArrayList<>();
         HashSet<String> hashes = directory.getHashes();
         hashes.forEach(hash -> {
-            HashSet<LeFile> files = structureBuilder.getHashRelatedFileStorage().get(hash);
+            HashSet<LeFile> files = structureBuilder.getHashRelatedLeFiles(hash);
             if (files != null && files.size() > 0) {
                 LeFile f = files.iterator().next();
                 files.forEach(this::highlightFile);
@@ -82,7 +81,6 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     @Override
     public void onCompleted(DuplicationStructureBuilder structureBuilder) {
         this.structureBuilder = structureBuilder;
-        structureBuilder.backup();
         presenter.geraffel(structureBuilder);
         presenter.hideProgressStuff();
     }
@@ -117,28 +115,26 @@ public class GuiController implements IGuiController, IGuiEventHandler {
 
     @Override
     public void onBtnRevertClicked() {
-        structureBuilder.restore();
-        presenter.geruffel();
-//        presenter.geraffel(structureBuilder);
-        presenter.disableWrite();
+        structureBuilder.rebuildDirectoryGraph();
+        presenter.geraffel(structureBuilder);
+        presenter.enableWrite();
     }
 
     @Override
     public void onBtnWriteClicked() {
-        structureBuilder.getRoot().write();
-        structureBuilder.rebuild();
-//        presenter.geraffel(structureBuilder);
+        structureBuilder.write();
+        structureBuilder.getRootDirectory().cleanGraph();
+        presenter.geruffel();
         presenter.disableWrite();
     }
 
 
     @Override
     public void onFileDeleteFilesEverywhereElse(LeFile leFile) {
-        leFile.getCustomFile().setMarkedForDeletion(true);
-        HashSet<LeFile> copies = structureBuilder.getHashRelatedFileStorage().get(leFile.getHash());
+        HashSet<LeFile> copies = structureBuilder.getHashRelatedLeFiles(leFile.getHash());
         copies.forEach(f -> {
             f.hide();
-            structureBuilder.getHashRelatedFileStorage().removeFile(f);
+            structureBuilder.removeLeFile(f);
             if (f != leFile) {
                 f.getCustomFile().setMarkedForDeletion(true);
             }
@@ -151,7 +147,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     public void onFileDeleteFile(LeFile leFile) {
         leFile.getCustomFile().setMarkedForDeletion(true);
         leFile.hide();
-        structureBuilder.getHashRelatedFileStorage().removeFile(leFile);
+        structureBuilder.removeLeFile(leFile);
         presenter.geruffel();
         presenter.enableWrite();
     }
@@ -159,11 +155,11 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     @Override
     public void onDirDeleteFilesEverywhereElse(Directory directory) {
         directory.getHashes().forEach(hash -> {
-            HashSet<LeFile> hashSet = structureBuilder.getHashRelatedFileStorage().get(hash);
+            HashSet<LeFile> hashSet = structureBuilder.getHashRelatedLeFiles(hash);
             hashSet.stream().filter(file -> file.getDirectory() != directory).forEach(file -> {
                 file.getCustomFile().setMarkedForDeletion(true);
                 file.hide();
-                structureBuilder.getHashRelatedFileStorage().removeFile(file);
+                structureBuilder.removeLeFile(file);
                 System.out.println(
                         "GuiController.onDirDeleteFilesEverywhereElse(" + file.getCustomFile().getAbsolutePath() + ")");
             });
@@ -176,12 +172,15 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     @Override
     public void onDirDeleteFiles(Directory directory) {
         directory.getHashes().forEach(hash -> {
-            HashSet<LeFile> hashSet = structureBuilder.getHashRelatedFileStorage().get(hash);
+            HashSet<LeFile> hashSet = structureBuilder.getHashRelatedLeFiles(hash);
             hashSet.stream().filter(file -> file.getDirectory() == directory).forEach(file -> {
-                file.getCustomFile().setMarkedForDeletion(true);
-                file.hide();
-                structureBuilder.getHashRelatedFileStorage().removeFile(file);
-                System.out.println("GuiController.onDirDeleteFiles(" + file.getCustomFile().getAbsolutePath() + ")");
+                //important: last copy might be in here
+                if (structureBuilder.atLeastTwoLeFiles(file.getHash())) {
+                    file.getCustomFile().setMarkedForDeletion(true);
+                    file.hide();
+                    structureBuilder.removeLeFile(file);
+                    System.out.println("GuiController.onDirDeleteFiles(" + file.getCustomFile().getAbsolutePath() + ")");
+                }
             });
             ;
         });
