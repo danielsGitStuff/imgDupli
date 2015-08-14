@@ -95,7 +95,8 @@ public class Gui {
         pnlSettings.add(btnPath, gbc_btnPath);
 
         txtPath = new JTextField();
-        txtPath.setText("C:\\Users\\xor\\picTest");
+        String pathText = System.getProperty("user.home");
+        txtPath.setText(pathText);
         GridBagConstraints gbc_txtPath = new GridBagConstraints();
         gbc_txtPath.fill = GridBagConstraints.HORIZONTAL;
         gbc_txtPath.anchor = GridBagConstraints.WEST;
@@ -168,6 +169,7 @@ public class Gui {
         pnlSettings.add(btnRevert, gridBagConstraints);
 
         tree = new OJTree();
+        tree.setModel(null);
         tree.setCellRenderer(new OTreeCllRndr());
         tree.addMouseListener(new MouseListener() {
 
