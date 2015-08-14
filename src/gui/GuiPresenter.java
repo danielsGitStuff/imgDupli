@@ -1,11 +1,5 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-
 import data.Directory;
 import data.DuplicationStructureBuilder;
 import data.LeFile;
@@ -15,6 +9,10 @@ import image.ImagefolderPanelPresenter;
 import main.Settings;
 import tree.OTreeNode;
 
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import java.io.File;
 import java.util.List;
 
@@ -22,9 +20,9 @@ public class GuiPresenter {
 
     private final GuiController controller;
     private final Gui gui;
-    private ListSelectionListener listSelectionListener;
     private final ImagefolderPanelPresenter imagefolderPanelPresenter;
     private final ImagePanelController imagePanelController = new ImagePanelController();
+    private ListSelectionListener listSelectionListener;
 
     public GuiPresenter(GuiController controller) {
         this.controller = controller;
@@ -104,12 +102,18 @@ public class GuiPresenter {
 
     public void enableWrite() {
         gui.enableWrite();
+    }
+
+    public void enableRevert() {
         gui.enableRevert();
+    }
+
+    public void disableRevert() {
+        gui.disableRevert();
     }
 
     public void disableWrite() {
         gui.disableWrite();
-        gui.disableRevert();
     }
 
     public void showFoundFilesCount(int foundFilesCount) {

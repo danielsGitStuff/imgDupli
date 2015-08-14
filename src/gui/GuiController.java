@@ -117,7 +117,8 @@ public class GuiController implements IGuiController, IGuiEventHandler {
     public void onBtnRevertClicked() {
         structureBuilder.rebuildDirectoryGraph();
         presenter.geraffel(structureBuilder);
-        presenter.enableWrite();
+        presenter.disableWrite();
+        presenter.disableRevert();
     }
 
     @Override
@@ -141,6 +142,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         });
         presenter.geruffel();
         presenter.enableWrite();
+        presenter.enableRevert();
     }
 
     @Override
@@ -150,6 +152,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         structureBuilder.removeLeFile(leFile);
         presenter.geruffel();
         presenter.enableWrite();
+        presenter.enableRevert();
     }
 
     @Override
@@ -167,6 +170,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         });
         presenter.geruffel();
         presenter.enableWrite();
+        presenter.enableRevert();
     }
 
     @Override
@@ -186,6 +190,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         });
         presenter.geruffel();
         presenter.enableWrite();
+        presenter.enableRevert();
     }
 
 }
