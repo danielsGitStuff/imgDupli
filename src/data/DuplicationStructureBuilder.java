@@ -1,8 +1,8 @@
 package data;
 
 import interfaces.ICustomFileGlobalStorage;
-import io.CustomFile;
-import io.FileSystem;
+import io.FsDirectory;
+import io.FsFile;
 import io.HashRelatedFileStorage;
 
 import java.io.File;
@@ -13,40 +13,40 @@ import java.util.Map;
 
 public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
 
-    private final FileSystem root;
+    private final FsDirectory root;
     private HashRelatedFileStorage<LeFile> hashRelatedLeFileStorage;
-    private HashRelatedFileStorage<CustomFile> hashRelatedCustomFileStorage;
-    private Map<FileSystem, Directory> fileSystemDirectoryMap = new HashMap<>();
+    private HashRelatedFileStorage<FsFile> hashRelatedCustomFileStorage;
+    private Map<FsDirectory, Directory> fileSystemDirectoryMap = new HashMap<>();
 
     /**
      * @param root
      * @param hashCollisions <String, List<>> ... String is hash value
      */
-    public DuplicationStructureBuilder(FileSystem root, Map<String, List<File>> hashCollisions) {
+    public DuplicationStructureBuilder(FsDirectory root, Map<String, List<File>> hashCollisions) {
         this.root = root;
         fileSystemDirectoryMap.put(root, new Directory(root));
         build(hashCollisions);
     }
 
-    private Directory traverseToRoot(FileSystem fileSystem) {
-        if (fileSystemDirectoryMap.get(fileSystem) == null) {
-            Directory directory = new Directory(fileSystem);
-            fileSystemDirectoryMap.put(fileSystem, directory);
-            if (fileSystem.getParent() == null)
+    private Directory traverseToRoot(FsDirectory fsDirectory) {
+        if (fileSystemDirectoryMap.get(fsDirectory) == null) {
+            Directory directory = new Directory(fsDirectory);
+            fileSystemDirectoryMap.put(fsDirectory, directory);
+            if (fsDirectory.getParent() == null)
                 return getRootDirectory();
-            Directory parentDir = traverseToRoot(fileSystem.getParent());
+            Directory parentDir = traverseToRoot(fsDirectory.getParent());
             directory.setParentDirectory(parentDir);
             parentDir.addSubDirectory(directory);
             return directory;
         } else {
-            return fileSystemDirectoryMap.get(fileSystem);
+            return fileSystemDirectoryMap.get(fsDirectory);
         }
     }
 
-    private void traverseToRoot(CustomFile customFile) {
-        FileSystem fileSystem = customFile.getFileSystem();
-        if (fileSystem != null) {
-            traverseToRoot(fileSystem);
+    private void traverseToRoot(FsFile fsFile) {
+        FsDirectory fsDirectory = fsFile.getFsDirectory();
+        if (fsDirectory != null) {
+            traverseToRoot(fsDirectory);
         }
     }
 
@@ -63,16 +63,16 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
         fileSystemDirectoryMap.put(root, new Directory(root));
     }
 
-    private void traverseDownReset(FileSystem fileSystem) {
-        Directory directory = traverseToRoot(fileSystem);
-        fileSystem.getFiles().forEach((string, customFile) -> {
+    private void traverseDownReset(FsDirectory fsDirectory) {
+        Directory directory = traverseToRoot(fsDirectory);
+        fsDirectory.getFiles().forEach((string, customFile) -> {
             customFile.resetFlags();
             LeFile leFile = new LeFile(customFile);
             directory.addLeFile(leFile);
             leFile.setDirectory(directory);
             hashRelatedLeFileStorage.put(leFile.getHash(), leFile);
         });
-        fileSystem.getDirectories().forEach((string, fs) -> traverseDownReset(fs));
+        fsDirectory.getDirectories().forEach((string, fs) -> traverseDownReset(fs));
     }
 
     private void build(Map<String, List<File>> hashCollisions) {
@@ -82,25 +82,25 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
         hashCollisions.keySet().forEach(hash -> {
             List<File> files = hashCollisions.get(hash);
             files.forEach(file -> {
-                CustomFile customFile = root.openFile(file);
-                customFile.setHash(hash);
-                processCustomFile(customFile);
+                FsFile fsFile = root.openFile(file);
+                fsFile.setHash(hash);
+                processCustomFile(fsFile);
             });
         });
     }
 
-    private void processCustomFile(CustomFile customFile) {
-        if (customFile.isMarkedForDeletion())
+    private void processCustomFile(FsFile fsFile) {
+        if (fsFile.isMarkedForDeletion())
             System.out.println("DuplicationStructureBuilder.processCustomFile.del");
-        if (customFile.isHidden())
+        if (fsFile.isHidden())
             System.out.println("DuplicationStructureBuilder.processCustomFile.hidden");
-        LeFile leFile = new LeFile(customFile);
-        FileSystem fileSystem = customFile.getFileSystem();
-        Directory directory = traverseToRoot(fileSystem);
+        LeFile leFile = new LeFile(fsFile);
+        FsDirectory fsDirectory = fsFile.getFsDirectory();
+        Directory directory = traverseToRoot(fsDirectory);
         directory.addLeFile(leFile);
         leFile.setDirectory(directory);
         hashRelatedLeFileStorage.put(leFile.getHash(), leFile);
-        hashRelatedCustomFileStorage.put(leFile.getHash(), customFile);
+        hashRelatedCustomFileStorage.put(leFile.getHash(), fsFile);
     }
 
     public void resetHighlighted() {
@@ -128,8 +128,8 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
     }
 
     @Override
-    public void removeCustomFile(CustomFile customFile) {
-        hashRelatedCustomFileStorage.removeFile(customFile);
+    public void removeCustomFile(FsFile fsFile) {
+        hashRelatedCustomFileStorage.removeFile(fsFile);
     }
 
 

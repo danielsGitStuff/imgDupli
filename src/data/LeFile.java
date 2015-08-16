@@ -1,16 +1,16 @@
 package data;
 
 import interfaces.IFileRepresentation;
-import io.CustomFile;
-import io.FSRelated;
+import io.FsFile;
+import io.FsRelated;
 
-public class LeFile extends FSRelated implements IFileRepresentation {
-	private CustomFile customFile;
+public class LeFile extends FsRelated implements IFileRepresentation {
+	private FsFile fsFile;
 	private Directory directory;
 
 
-	public LeFile(CustomFile customFile) {
-		this.customFile = customFile;
+	public LeFile(FsFile fsFile) {
+		this.fsFile = fsFile;
 	}
 
 	public Directory getDirectory() {
@@ -22,7 +22,7 @@ public class LeFile extends FSRelated implements IFileRepresentation {
 	}
 
 	public String getHash() {
-		return customFile.getHash();
+		return fsFile.getHash();
 	}
 
 	public void resetFlags() {
@@ -32,11 +32,11 @@ public class LeFile extends FSRelated implements IFileRepresentation {
 
 	@Override
 	public String toString() {
-		return customFile.toString();
+		return fsFile.toString();
 	}
 
-	public CustomFile getCustomFile() {
-		return customFile;
+	public FsFile getFsFile() {
+		return fsFile;
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class LeFile extends FSRelated implements IFileRepresentation {
 	}
 
 	public void cleanGraph() {
-		if (!customFile.exists() || customFile.isMarkedForDeletion()) {
+		if (!fsFile.exists() || fsFile.isMarkedForDeletion()) {
 			hide();
 		}
 	}

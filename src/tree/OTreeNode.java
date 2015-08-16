@@ -1,6 +1,6 @@
 package tree;
 
-import io.FSRelated;
+import io.FsRelated;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.Vector;
@@ -12,7 +12,7 @@ public class OTreeNode extends DefaultMutableTreeNode {
 
     public void check() {
         //nothing here -> remove from parent
-        FSRelated fsRelated = (FSRelated) userObject;
+        FsRelated fsRelated = (FsRelated) userObject;
         if (fsRelated.isHidden()) {
             OTreeNode parent = (OTreeNode) this.parent;
             parent.removeOTreeNode(this);

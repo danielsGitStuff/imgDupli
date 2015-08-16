@@ -1,10 +1,8 @@
 package image;
 
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import javax.swing.ImageIcon;
 
 class ImageRunnerCallable implements Callable<Object> {
 	private final ImagePanel panel;
@@ -12,9 +10,7 @@ class ImageRunnerCallable implements Callable<Object> {
 	public ImageRunnerCallable(ImagePanel panel) {
 		this.panel = panel;
 	}
-	public void setTask(FutureTask<Object> task) {
-		FutureTask<Object> task1 = task;
-	}
+
 
 	private Image scale(Image image, int maxX, int maxY) {
 		if (image == null) {

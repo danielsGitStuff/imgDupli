@@ -42,7 +42,6 @@ public class ImagePanel extends JPanel {
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                ImagePanel imagePanel = (ImagePanel) e.getSource();
             }
 
             @Override

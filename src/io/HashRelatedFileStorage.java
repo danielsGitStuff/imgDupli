@@ -31,7 +31,7 @@ public class HashRelatedFileStorage<T extends IFileRepresentation> {
 
     public HashSet<T> get(String hash) {
         if (hashLeFileMap.containsKey(hash)) {
-            HashSet<T> result = (HashSet<T>) hashLeFileMap.get(hash);
+            HashSet<T> result = hashLeFileMap.get(hash);
             if (result != null)
                 return (HashSet<T>) result.clone();
         }
@@ -40,18 +40,12 @@ public class HashRelatedFileStorage<T extends IFileRepresentation> {
 
     public boolean atLeastTwoCopies(String hash) {
         HashSet<T> result = get(hash);
-        if (result == null)
-            return false;
-        if (result.size() > 1)
-            return true;
-        return false;
+        return result != null && result.size() > 1;
     }
 
     public void backup() {
         backup = new HashMap<>();
-        hashLeFileMap.forEach((hash, hashset) -> {
-            backup.put(hash, new HashSet<>(hashset));
-        });
+        hashLeFileMap.forEach((hash, hashset) -> backup.put(hash, new HashSet<>(hashset)));
 
     }
 

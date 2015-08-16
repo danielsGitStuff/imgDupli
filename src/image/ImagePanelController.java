@@ -1,12 +1,10 @@
 package image;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class ImagePanelController implements IImageLoadRequestListener {
@@ -15,6 +13,11 @@ public class ImagePanelController implements IImageLoadRequestListener {
 
 	public ImagePanelController() {
 		this.executor = Executors.newWorkStealingPool();
+	}
+
+	private static FutureTask<Object> createImageTask(ImagePanel imagePanel) {
+		ImageRunnerCallable callable = new ImageRunnerCallable(imagePanel);
+		return new FutureTask<>(callable);
 	}
 
 	public void reset() {
@@ -34,14 +37,14 @@ public class ImagePanelController implements IImageLoadRequestListener {
 		int x = imagePanel.getWidth();
 		int y = imagePanel.getHeight();
 		if (x > 0 && y > 0) {
-			FutureTask<Object> task = ImageRunner.createImageTask(imagePanel);
+			FutureTask<Object> task = ImagePanelController.createImageTask(imagePanel);
 			if (oldeRequests.containsKey(imagePanel)) {
 				FutureTask<Object> oldeTask = oldeRequests.get(imagePanel);
 				if (oldeTask != null && !oldeTask.isDone() && !oldeTask.isCancelled()) {
 					oldeTask.cancel(true);
 				}
 			}
-			Future<?> future = executor.submit(task);
+			executor.submit(task);
 			oldeRequests.put(imagePanel, task);
 		}
 

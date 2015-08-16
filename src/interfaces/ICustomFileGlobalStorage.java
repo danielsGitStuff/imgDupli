@@ -1,13 +1,13 @@
 package interfaces;
 
-import io.CustomFile;
+import io.FsFile;
 
 /**
  * Created by xor on 14.08.2015.
  */
 public interface ICustomFileGlobalStorage {
 
-    void removeCustomFile(CustomFile customFile);
+    void removeCustomFile(FsFile fsFile);
 
 }
 

@@ -1,12 +1,11 @@
 package gui;
 
-import data.ConcurrentResultMap;
 import data.Directory;
 import data.DuplicationStructureBuilder;
 import data.LeFile;
-import interfaces.IGuiController;
+import interfaces.IDuplicateSearchListener;
 import interfaces.IGuiEventHandler;
-import io.FileSystem;
+import io.FsDirectory;
 import main.SearchController;
 import main.Settings;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class GuiController implements IGuiController, IGuiEventHandler {
+public class GuiController implements IDuplicateSearchListener, IGuiEventHandler {
 
     private final GuiPresenter presenter;
     private SearchController searchController;
@@ -33,11 +32,6 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         presenter.show();
     }
 
-
-    @Override
-    public void setResultMap(ConcurrentResultMap result) {
-
-    }
 
 
     private void highlightFile(LeFile f) {
@@ -68,8 +62,8 @@ public class GuiController implements IGuiController, IGuiEventHandler {
                 duplicates.add(f);
             }
         });
-        FileSystem fileSystem = directory.getFileSystem();
-        File[] images = fileSystem.getFile().listFiles(searchController.getSettings().getInterestingFileFilter());
+        FsDirectory fsDirectory = directory.getFsDirectory();
+        File[] images = fsDirectory.getFile().listFiles(searchController.getSettings().getInterestingFileFilter());
         presenter.showFolder(duplicates, images);
     }
 
@@ -137,7 +131,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
             f.hide();
             structureBuilder.removeLeFile(f);
             if (f != leFile) {
-                f.getCustomFile().setMarkedForDeletion(true);
+                f.getFsFile().setMarkedForDeletion(true);
             }
         });
         presenter.geruffel();
@@ -147,7 +141,7 @@ public class GuiController implements IGuiController, IGuiEventHandler {
 
     @Override
     public void onFileDeleteFile(LeFile leFile) {
-        leFile.getCustomFile().setMarkedForDeletion(true);
+        leFile.getFsFile().setMarkedForDeletion(true);
         leFile.hide();
         structureBuilder.removeLeFile(leFile);
         presenter.geruffel();
@@ -160,13 +154,12 @@ public class GuiController implements IGuiController, IGuiEventHandler {
         directory.getHashes().forEach(hash -> {
             HashSet<LeFile> hashSet = structureBuilder.getHashRelatedLeFiles(hash);
             hashSet.stream().filter(file -> file.getDirectory() != directory).forEach(file -> {
-                file.getCustomFile().setMarkedForDeletion(true);
+                file.getFsFile().setMarkedForDeletion(true);
                 file.hide();
                 structureBuilder.removeLeFile(file);
                 System.out.println(
-                        "GuiController.onDirDeleteFilesEverywhereElse(" + file.getCustomFile().getAbsolutePath() + ")");
+                        "GuiController.onDirDeleteFilesEverywhereElse(" + file.getFsFile().getAbsolutePath() + ")");
             });
-            ;
         });
         presenter.geruffel();
         presenter.enableWrite();
@@ -180,13 +173,12 @@ public class GuiController implements IGuiController, IGuiEventHandler {
             hashSet.stream().filter(file -> file.getDirectory() == directory).forEach(file -> {
                 //important: last copy might be in here
                 if (structureBuilder.atLeastTwoLeFiles(file.getHash())) {
-                    file.getCustomFile().setMarkedForDeletion(true);
+                    file.getFsFile().setMarkedForDeletion(true);
                     file.hide();
                     structureBuilder.removeLeFile(file);
-                    System.out.println("GuiController.onDirDeleteFiles(" + file.getCustomFile().getAbsolutePath() + ")");
+                    System.out.println("GuiController.onDirDeleteFiles(" + file.getFsFile().getAbsolutePath() + ")");
                 }
             });
-            ;
         });
         presenter.geruffel();
         presenter.enableWrite();

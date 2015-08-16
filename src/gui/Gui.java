@@ -257,8 +257,7 @@ public class Gui {
     protected void handleMouseClickedOnTree(MouseEvent e) {
         if (e.getButton() == 3) {
             OJTree tree = (OJTree) e.getSource();
-            TreePath path = tree.getSelectionPath();
-            path = tree.getClosestPathForLocation(e.getX(), e.getY());
+            TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
             DefaultMutableTreeNode clickedNnode = (DefaultMutableTreeNode) path.getLastPathComponent();
             Object userObject = clickedNnode.getUserObject();
             JPopupMenu menu = new JPopupMenu("bla");

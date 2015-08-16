@@ -1,7 +1,7 @@
 package tree;
 
-import io.CustomFile;
-import io.FileSystem;
+import io.FsDirectory;
+import io.FsFile;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -13,10 +13,10 @@ public class OJTree extends JTree {
 			boolean hasFocus) {
 		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
 		Object ins = treeNode.getUserObject();
-		if (ins instanceof FileSystem) {
-			return ((FileSystem) ins).getPath();
-		} else if (ins instanceof CustomFile) {
-			CustomFile file = (CustomFile) ins;
+		if (ins instanceof FsDirectory) {
+			return ((FsDirectory) ins).getPath();
+		} else if (ins instanceof FsFile) {
+			FsFile file = (FsFile) ins;
 			if (file.isMarkedForDeletion()) {
 				return "deleted!";
 			}

@@ -4,26 +4,20 @@ import interfaces.ICustomFileGlobalStorage;
 import interfaces.IFileRepresentation;
 
 import java.io.File;
-import java.util.Random;
 
 @SuppressWarnings("serial")
-public class CustomFile extends File implements IFileRepresentation {
+public class FsFile extends File implements IFileRepresentation {
 
-    private final long randomId;
     private String filePath;
     private boolean markedForDeletion = false;
-    private FileSystem fileSystem;
+    private FsDirectory fsDirectory;
     private String hash;
 
-    public CustomFile(String path) {
+    public FsFile(String path) {
         super(path);
         this.filePath = path;
-        this.randomId = new Random().nextLong();
     }
 
-    public long getRandomId() {
-        return randomId;
-    }
 
     public boolean isMarkedForDeletion() {
         return markedForDeletion;
@@ -33,20 +27,20 @@ public class CustomFile extends File implements IFileRepresentation {
         this.markedForDeletion = markedForDeletion;
     }
 
-    public FileSystem getFileSystem() {
-        return fileSystem;
+    public FsDirectory getFsDirectory() {
+        return fsDirectory;
     }
 
-    public void setFileSystem(FileSystem fileSystem) {
-        this.fileSystem = fileSystem;
+    public void setFsDirectory(FsDirectory fsDirectory) {
+        this.fsDirectory = fsDirectory;
     }
 
     @Override
     public String toString() {
         String path = filePath;
         String fileName = path;
-        if (path.contains(FileSystem.FS_SEPARATOR)) {
-            fileName = path.substring(path.lastIndexOf(FileSystem.FS_SEPARATOR) + 1);
+        if (path.contains(FsDirectory.FS_SEPARATOR)) {
+            fileName = path.substring(path.lastIndexOf(FsDirectory.FS_SEPARATOR) + 1);
         }
         return fileName;
     }
@@ -66,9 +60,9 @@ public class CustomFile extends File implements IFileRepresentation {
 
     @Override
     public boolean equals(Object obj) {
-        System.out.println("CustomFile.equals()");
-        if (obj instanceof CustomFile) {
-            CustomFile f = (CustomFile) obj;
+        System.out.println("FsFile.equals()");
+        if (obj instanceof FsFile) {
+            FsFile f = (FsFile) obj;
             if (hash != null && f.hash != null) {
                 return f.hash.equals(hash);
             }
@@ -84,7 +78,7 @@ public class CustomFile extends File implements IFileRepresentation {
     }
 
     public void removeFromGraph(ICustomFileGlobalStorage globalStorage) {
-        fileSystem.removeCustomFile(this);
+        fsDirectory.removeCustomFile(this);
         globalStorage.removeCustomFile(this);
     }
 

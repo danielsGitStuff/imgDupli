@@ -88,7 +88,7 @@ public class GuiPresenter {
     public void showSingleImage(LeFile file) {
         gui.pnlViewContainer.removeAll();
         imagePanelController.reset();
-        ImagePanel imagePanel = imagePanelController.createImagePanel(file.getCustomFile());
+        ImagePanel imagePanel = imagePanelController.createImagePanel(file.getFsFile());
         gui.pnlViewContainer.add(imagePanel);
         gui.pnlViewContainer.updateUI();
     }

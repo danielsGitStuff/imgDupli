@@ -1,17 +1,11 @@
 package tree;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import io.FsRelated;
 
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
-import io.FSRelated;
+import java.awt.*;
 
 public class OTreeCllRndr extends DefaultTreeCellRenderer {
 
@@ -26,8 +20,8 @@ public class OTreeCllRndr extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
 		Object userObject = treeNode.getUserObject();
 
-		if (userObject instanceof FSRelated) {
-			FSRelated ifsRelated = (FSRelated) userObject;
+		if (userObject instanceof FsRelated) {
+			FsRelated ifsRelated = (FsRelated) userObject;
 			Font f = getFont();
 			if (ifsRelated.isHighlighted()) {
 				setForeground(SELECTED_FOREGROUND);

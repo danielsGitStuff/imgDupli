@@ -1,19 +1,21 @@
 package main;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import data.DuplicationStructureBuilder;
 import filefinder.FileFinder;
 import interfaces.IDuplicateSearchListener;
 import interfaces.ISearchController;
-import io.FileSystem;
+import io.FsDirectory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchController implements ISearchController {
-    private Settings settings;
     private final List<IDuplicateSearchListener> searchListeners = new ArrayList<>();
+    private Settings settings;
     private FileFinder fileFinder;
+    private int interestingFilesCount = 0;
+    private int hashedFilesCount = 0;
 
     public SearchController() {
     }
@@ -30,12 +32,9 @@ public class SearchController implements ISearchController {
         searchListeners.add(listener);
     }
 
-    private int interestingFilesCount = 0;
-    private int hashedFilesCount = 0;
-
     @Override
     public void onHashingDone(FileFinder fileFinder) {
-        FileSystem root = new FileSystem(settings.getRootPath());
+        FsDirectory root = new FsDirectory(settings.getRootPath());
         DuplicationStructureBuilder structureBuilder = new DuplicationStructureBuilder(root,
                 fileFinder.getResultMap().getHashCollisions());
         searchListeners.forEach(l -> l.onCompleted(structureBuilder));

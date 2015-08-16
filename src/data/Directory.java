@@ -1,22 +1,22 @@
 package data;
 
-import io.FSRelated;
-import io.FileSystem;
+import io.FsDirectory;
+import io.FsRelated;
 
 import java.util.HashSet;
 
-public class Directory extends FSRelated {
+public class Directory extends FsRelated {
     private Directory parentDirectory;
     private HashSet<Directory> subDirectories = new HashSet<>();
     private HashSet<LeFile> leFiles = new HashSet<>();
-    private FileSystem fileSystem;
+    private FsDirectory fsDirectory;
 
-    public Directory(FileSystem fileSystem) {
-        this.fileSystem = fileSystem;
+    public Directory(FsDirectory fsDirectory) {
+        this.fsDirectory = fsDirectory;
     }
 
-    public FileSystem getFileSystem() {
-        return fileSystem;
+    public FsDirectory getFsDirectory() {
+        return fsDirectory;
     }
 
     public void addLeFile(LeFile leFile) {
@@ -37,14 +37,14 @@ public class Directory extends FSRelated {
 
     @Override
     public String toString() {
-        return "[" + fileSystem.getPath() + "]";
+        return "[" + fsDirectory.getPath() + "]";
     }
 
     @Override
     public void resetFlags() {
         highlighted = false;
-        subDirectories.forEach(dir -> dir.resetFlags());
-        leFiles.forEach(f -> f.resetFlags());
+        subDirectories.forEach(Directory::resetFlags);
+        leFiles.forEach(LeFile::resetFlags);
     }
 
     public HashSet<Directory> getSubDirectories() {
@@ -63,9 +63,9 @@ public class Directory extends FSRelated {
 
     public void cleanGraph() {
         HashSet<LeFile> files = (HashSet<LeFile>) this.leFiles.clone();
-        files.forEach(f -> f.cleanGraph());
+        files.forEach(LeFile::cleanGraph);
         HashSet<Directory> directories = (HashSet<Directory>) this.subDirectories.clone();
-        directories.forEach(d -> d.cleanGraph());
+        directories.forEach(Directory::cleanGraph);
         checkRemoval();
     }
 

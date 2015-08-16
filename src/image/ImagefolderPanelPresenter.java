@@ -1,9 +1,12 @@
 package image;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import data.LeFile;
+import gui.Gui;
+import interfaces.IGuiEventHandler;
+import io.FsFile;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -11,26 +14,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.*;
-
-import data.LeFile;
-import gui.Gui;
-import interfaces.IGuiEventHandler;
-import io.CustomFile;
-
 @SuppressWarnings("unused")
 public class ImagefolderPanelPresenter {
 
     private final JPanel pnlNorth;
     private final JPanel pnlSouth;
     private final IGuiEventHandler eventHandler;
-    private List<CustomFile> otherFiles = new ArrayList<>();
-    private List<CustomFile> duplicates = new ArrayList<>();
     private final JScrollPane scrollPaneSouth;
     private final JSplitPane container;
     private final ImagePanelController imagePanelController = new ImagePanelController();
     private final Gui gui;
-
+    private final int PICS_PER_ROW = 5;
+    private final int IMG_PNL_INSET = 5;
+    private List<FsFile> otherFiles = new ArrayList<>();
+    private int folderImagesColumnCount = 0;
+    private int folderImagesRowCount = 0;
     public ImagefolderPanelPresenter(Gui gui, IGuiEventHandler eventHandler) {
         this.pnlNorth = gui.getPnlNorth();
         this.pnlSouth = gui.getPnlSouth();
@@ -42,20 +40,13 @@ public class ImagefolderPanelPresenter {
 
     public void reset() {
         otherFiles = new ArrayList<>();
-        duplicates = new ArrayList<>();
-        int duplicatesCount = 0;
         folderImagesColumnCount = folderImagesRowCount = 0;
         imagePanelController.reset();
     }
 
-    public void setOtherFiles(List<CustomFile> files) {
+    public void setOtherFiles(List<FsFile> files) {
         this.otherFiles = files;
     }
-
-    private int folderImagesColumnCount = 0;
-    private int folderImagesRowCount = 0;
-    private final int PICS_PER_ROW = 5;
-    private final int IMG_PNL_INSET = 5;
 
     private Dimension calcImageDimension() {
         int width = scrollPaneSouth.getWidth() / PICS_PER_ROW;
@@ -74,11 +65,9 @@ public class ImagefolderPanelPresenter {
         folderImagesColumnCount =0;
         folderImagesRowCount =0;
         pnlNorth.removeAll();
-        this.duplicates = new ArrayList<>();
         if (duplicates != null) {
-            int picsPerRow = duplicates.size();
             duplicates.forEach(dup -> {
-                ImagePanel imagePanel = addImage(pnlNorth, dup.getCustomFile());
+                ImagePanel imagePanel = addImage(pnlNorth, dup.getFsFile());
                 imagePanel.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {

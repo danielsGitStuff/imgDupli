@@ -1,17 +1,9 @@
 package main;
 
-import java.io.File;
-
-import javax.swing.UIManager;
-
-import data.ConcurrentResultMap;
-import data.DuplicationStructureBuilder;
-import filefinder.FileFinder;
 import gui.GuiController;
-import interfaces.IDuplicateSearchListener;
-import interfaces.IGuiController;
-import io.FileSystem;
 import tools.OTimer;
+
+import javax.swing.*;
 
 class MainController {
 

@@ -8,23 +8,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class FileSystem {
+public class FsDirectory {
 	public static final String FS_SEPARATOR = System.getProperty("file.separator");
 	private final String path;
-	private final Map<String, CustomFile> files = new HashMap<>();
-	private final Map<String, FileSystem> directories = new HashMap<>();
-	private CustomFile target;
-	private FileSystem parent;
+	private final Map<String, FsFile> files = new HashMap<>();
+	private final Map<String, FsDirectory> directories = new HashMap<>();
+	private FsFile target;
+	private FsDirectory parent;
 
-	public FileSystem(String path) {
+	public FsDirectory(String path) {
 		if (path.endsWith(FS_SEPARATOR)) {
 			path = path.substring(0, path.lastIndexOf(FS_SEPARATOR));
 		}
 		this.path = path;
-		this.target = new CustomFile(path);
+		this.target = new FsFile(path);
 	}
 
-	private FileSystem(String path, FileSystem parent) {
+	private FsDirectory(String path, FsDirectory parent) {
 		this.parent = parent;
 		this.path = path;
 	}
@@ -33,7 +33,7 @@ public class FileSystem {
 		return (parent == null) ? path : parent.getAbsolutePath() + FS_SEPARATOR + path;
 	}
 
-	public CustomFile openFile(File file) {
+	public FsFile openFile(File file) {
 		// File file can be a directory too
 		String fPath = file.getAbsolutePath();
 		String aPath = getAbsolutePath();
@@ -46,34 +46,34 @@ public class FileSystem {
 		// is it a dir?
 		if (fPath.contains(FS_SEPARATOR)) {
 			String path = fPath.substring(0, fPath.indexOf(FS_SEPARATOR));
-			FileSystem subDir = openSubDirectory(path);
+			FsDirectory subDir = openSubDirectory(path);
 			return subDir.openFile(file);
 		} else {
 			// nope, file
-			CustomFile customFile = openSubFile(fPath);
-			files.put(customFile.getName(), customFile);
-			return customFile;
+			FsFile fsFile = openSubFile(fPath);
+			files.put(fsFile.getName(), fsFile);
+			return fsFile;
 		}
 	}
 
-	private FileSystem openSubDirectory(String path) {
-		FileSystem subDir;
+	private FsDirectory openSubDirectory(String path) {
+		FsDirectory subDir;
 		if (directories.containsKey(path)) {
 			subDir = directories.get(path);
 		} else {
-			subDir = new FileSystem(path, this);
+			subDir = new FsDirectory(path, this);
 			directories.put(path, subDir);
 		}
 		return subDir;
 	}
 
-	private CustomFile openSubFile(String path) {
-		CustomFile subFile;
+	private FsFile openSubFile(String path) {
+		FsFile subFile;
 		if (files.containsKey(path)) {
 			subFile = files.get(path);
 		} else {
-			subFile = new CustomFile(getAbsolutePath() + FS_SEPARATOR + path);
-			subFile.setFileSystem(this);
+			subFile = new FsFile(getAbsolutePath() + FS_SEPARATOR + path);
+			subFile.setFsDirectory(this);
 		}
 		return subFile;
 	}
@@ -83,11 +83,11 @@ public class FileSystem {
 		return (parent == null) ? "[Root]" : FS_SEPARATOR + path;
 	}
 
-	public Map<String, FileSystem> getDirectories() {
+	public Map<String, FsDirectory> getDirectories() {
 		return directories;
 	}
 
-	public Map<String, CustomFile> getFiles() {
+	public Map<String, FsFile> getFiles() {
 		return files;
 	}
 
@@ -95,7 +95,7 @@ public class FileSystem {
 		return path;
 	}
 
-	public FileSystem getParent() {
+	public FsDirectory getParent() {
 		return parent;
 	}
 
@@ -106,19 +106,19 @@ public class FileSystem {
 	public void write(ICustomFileGlobalStorage globalStorage) {
 		Set<String> fileKeySet = new HashSet<>(files.keySet());
 		fileKeySet.forEach(hash -> {
-			CustomFile file = files.get(hash);
+			FsFile file = files.get(hash);
 			file.write(globalStorage);
 		});
 		Set<String> dirKeySet = new HashSet<>(directories.keySet());
 		dirKeySet.forEach(path -> {
-			FileSystem fileSystem = directories.get(path);
-			fileSystem.write(globalStorage);
+			FsDirectory fsDirectory = directories.get(path);
+			fsDirectory.write(globalStorage);
 		});
 		checkRemoval();
 	}
 
-	public void removeCustomFile(CustomFile customFile) {
-		files.remove(customFile.getName());
+	public void removeCustomFile(FsFile fsFile) {
+		files.remove(fsFile.getName());
 		checkRemoval();
 	}
 
@@ -128,10 +128,10 @@ public class FileSystem {
 		}
 	}
 
-	private void removeSubFileSystem(FileSystem fileSystem) {
+	private void removeSubFileSystem(FsDirectory fsDirectory) {
 		// we want root to stay here
 		if (parent != null) {
-			directories.remove(fileSystem.getPath());
+			directories.remove(fsDirectory.getPath());
 			checkRemoval();
 		}
 	}
