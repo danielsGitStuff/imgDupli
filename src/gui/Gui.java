@@ -107,6 +107,7 @@ public class Gui {
         txtPath.setColumns(10);
 
         JLabel lblNewLabel = new JLabel("File/Thread Ratio");
+        lblNewLabel.setForeground(Color.WHITE);
         GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
         gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
         gbc_lblNewLabel.gridx = 2;
@@ -125,6 +126,7 @@ public class Gui {
 
 
         JLabel lblNewLabel_1 = new JLabel("file types");
+        lblNewLabel_1.setForeground(Color.WHITE);
         GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
         gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
         gbc_lblNewLabel_1.gridx = 4;

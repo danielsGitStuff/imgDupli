@@ -10,7 +10,7 @@ class MainController {
 	public static void main(String[] args) {
 		OTimer timerStartUp = new OTimer("startup").start();
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 
 		} catch (Exception e) {
 			e.printStackTrace();
