@@ -65,9 +65,9 @@ public class Gui {
         pnlSettings = new JPanel();
         pnlSettings.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
         GridBagConstraints gbc_pnlSettings = new GridBagConstraints();
+        gbc_pnlSettings.insets = new Insets(2, 2, 2, 2);
         gbc_pnlSettings.weightx = 0.5;
         gbc_pnlSettings.anchor = GridBagConstraints.NORTH;
-        gbc_pnlSettings.insets = new Insets(0, 0, 5, 0);
         gbc_pnlSettings.fill = GridBagConstraints.BOTH;
         gbc_pnlSettings.gridx = 0;
         gbc_pnlSettings.gridy = 0;
@@ -267,6 +267,7 @@ public class Gui {
         spTreeImages.setResizeWeight(0.2);
         spTreeImages.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints gbc_splitPane = new GridBagConstraints();
+        gbc_splitPane.insets = new Insets(0, 2, 2, 2);
         gbc_splitPane.anchor = GridBagConstraints.NORTH;
         gbc_splitPane.weighty = 1.0;
         gbc_splitPane.fill = GridBagConstraints.BOTH;
