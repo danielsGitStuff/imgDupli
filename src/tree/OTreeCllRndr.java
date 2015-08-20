@@ -5,12 +5,12 @@ import io.FsRelated;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
+import gui.GuiColours;
+
 import java.awt.*;
 
 public class OTreeCllRndr extends DefaultTreeCellRenderer {
-
-	private static final Color DEFAULT_FOREGROUND = Color.BLACK;
-	private static final Color SELECTED_FOREGROUND = new Color(180, 0, 0);
 
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
@@ -24,16 +24,26 @@ public class OTreeCllRndr extends DefaultTreeCellRenderer {
 			FsRelated ifsRelated = (FsRelated) userObject;
 			Font f = getFont();
 			if (ifsRelated.isHighlighted()) {
-				setForeground(SELECTED_FOREGROUND);
+				setForeground(GuiColours.SELECTED_FOREGROUND);
 				setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 
 			} else {
-				setForeground(DEFAULT_FOREGROUND);
+				setForeground(GuiColours.DEFAULT_FOREGROUND);
 				setFont(f.deriveFont(f.getStyle() & ~Font.BOLD));
 
 			}
 		}
 		return this;
+	}
+	
+	 @Override
+	    public Color getBackgroundNonSelectionColor() {
+		 return GuiColours.TREE_BACKGRND;
+	    }
+	 
+	 @Override
+	public Color getBackgroundSelectionColor() {
+		return GuiColours.TREE_SELECTED_BACKGRND;
 	}
 
 }

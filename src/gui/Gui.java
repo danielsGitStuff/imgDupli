@@ -48,6 +48,7 @@ public class Gui {
         progressBar = new JProgressBar();
         btnStop = new JButton("Stop");
         btnRevert = new JButton("Revert Changes");
+        btnRevert.setBackground(GuiColours.BTN_BACKGRND);
         btnRevert.setEnabled(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -56,12 +57,13 @@ public class Gui {
         GridBagLayout gbl_canvas = new GridBagLayout();
         gbl_canvas.rowWeights = new double[]{0.0, 1.0};
         gbl_canvas.columnWeights = new double[]{1.0};
+        canvas.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
         canvas.setLayout(gbl_canvas);
         canvas.setVisible(false);
         frame.getContentPane().add(canvas);
 
         pnlSettings = new JPanel();
-        pnlSettings.setBackground(Color.GRAY);
+        pnlSettings.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
         GridBagConstraints gbc_pnlSettings = new GridBagConstraints();
         gbc_pnlSettings.weightx = 0.5;
         gbc_pnlSettings.anchor = GridBagConstraints.NORTH;
@@ -73,7 +75,9 @@ public class Gui {
         GridBagLayout gbl_pnlSettings = new GridBagLayout();
         pnlSettings.setLayout(gbl_pnlSettings);
 
+        
         JButton btnPath = new JButton("Path");
+        btnPath.setBackground(GuiColours.BTN_BACKGRND);
         btnPath.addActionListener((e) -> {
             File file = new File(txtPath.getText());
             JFileChooser chooser = new JFileChooser();
@@ -89,17 +93,20 @@ public class Gui {
             }
         });
         GridBagConstraints gbc_btnPath = new GridBagConstraints();
+        gbc_btnPath.insets = new Insets(2, 2, 2, 2);
         gbc_btnPath.fill = GridBagConstraints.HORIZONTAL;
         gbc_btnPath.gridx = 0;
         gbc_btnPath.gridy = 0;
         pnlSettings.add(btnPath, gbc_btnPath);
 
         txtPath = new JTextField();
+        txtPath.setBorder(BorderFactory.createEmptyBorder());
+        txtPath.setBackground(GuiColours.TXTEDIT_BACKGRND);
         String pathText = System.getProperty("user.home");
         txtPath.setText(pathText);
         GridBagConstraints gbc_txtPath = new GridBagConstraints();
-        gbc_txtPath.fill = GridBagConstraints.HORIZONTAL;
-        gbc_txtPath.anchor = GridBagConstraints.WEST;
+        gbc_txtPath.insets = new Insets(2, 2, 2, 2);
+        gbc_txtPath.fill = GridBagConstraints.BOTH;
         gbc_txtPath.weightx = 0.5;
         gbc_txtPath.gridx = 1;
         gbc_txtPath.gridy = 0;
@@ -109,6 +116,7 @@ public class Gui {
         JLabel lblNewLabel = new JLabel("File/Thread Ratio");
         lblNewLabel.setForeground(Color.WHITE);
         GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+        gbc_lblNewLabel.insets = new Insets(0, 5, 0, 5);
         gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
         gbc_lblNewLabel.gridx = 2;
         gbc_lblNewLabel.gridy = 0;
@@ -116,7 +124,11 @@ public class Gui {
 
         txtFileThreadRatio = new JTextField();
         txtFileThreadRatio.setText("200");
+        txtFileThreadRatio.setBorder(BorderFactory.createEmptyBorder());
+        txtFileThreadRatio.setBackground(GuiColours.TXTEDIT_BACKGRND);
         GridBagConstraints gbc_txtFileThreadRatio = new GridBagConstraints();
+        gbc_txtFileThreadRatio.insets = new Insets(2, 2, 2, 2);
+        gbc_txtFileThreadRatio.fill = GridBagConstraints.BOTH;
         gbc_txtFileThreadRatio.anchor = GridBagConstraints.WEST;
         gbc_txtFileThreadRatio.gridx = 3;
         gbc_txtFileThreadRatio.gridy = 0;
@@ -128,27 +140,33 @@ public class Gui {
         JLabel lblNewLabel_1 = new JLabel("file types");
         lblNewLabel_1.setForeground(Color.WHITE);
         GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+        gbc_lblNewLabel_1.insets = new Insets(0, 5, 0, 5);
         gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
         gbc_lblNewLabel_1.gridx = 4;
         gbc_lblNewLabel_1.gridy = 0;
         pnlSettings.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
         txtFileTypes = new JTextField();
+        txtFileTypes.setBorder(BorderFactory.createEmptyBorder());
+        txtFileTypes.setBackground(GuiColours.TXTEDIT_BACKGRND);
         txtFileTypes.setText("jpg,jpeg,png,bmp,psd");
         GridBagConstraints gbc_txtFileTypes = new GridBagConstraints();
-        gbc_txtFileTypes.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txtFileTypes.insets = new Insets(2, 2, 2, 2);
+        gbc_txtFileTypes.fill = GridBagConstraints.BOTH;
         gbc_txtFileTypes.gridx = 5;
         gbc_txtFileTypes.gridy = 0;
         pnlSettings.add(txtFileTypes, gbc_txtFileTypes);
         txtFileTypes.setColumns(10);
 
         btnStart = new JButton("Start");
+        btnStart.setBackground(GuiColours.BTN_BACKGRND);
         btnStart.addActionListener(arg0 -> {
             System.out.println("start.clicked");
             eventHandler.onBtnStartClicked();
         });
         btnStop.addActionListener(e -> eventHandler.onBtnStopClicked());
         GridBagConstraints gbc_btnStart = new GridBagConstraints();
+        gbc_btnStart.insets = new Insets(2, 2, 2, 2);
         gbc_btnStart.gridwidth = 2;
         gbc_btnStart.fill = GridBagConstraints.HORIZONTAL;
         gbc_btnStart.gridx = 0;
@@ -157,20 +175,24 @@ public class Gui {
         pnlSettings.add(btnStart, gbc_btnStart);
 
         btnWrite = new JButton("Write!");
+        btnWrite.setBackground(GuiColours.BTN_BACKGRND);
         btnWrite.setEnabled(false);
         btnWrite.setForeground(Color.RED);
         GridBagConstraints gbc_btnWrite = new GridBagConstraints();
+        gbc_btnWrite.insets = new Insets(2, 2, 2, 2);
         gbc_btnWrite.fill = GridBagConstraints.HORIZONTAL;
         gbc_btnWrite.gridx = 5;
         gbc_btnWrite.gridy = 1;
         pnlSettings.add(btnWrite, gbc_btnWrite);
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         pnlSettings.add(btnRevert, gridBagConstraints);
 
         tree = new OJTree();
+        tree.setBackground(GuiColours.TREE_BACKGRND);
         tree.setModel(null);
         tree.setCellRenderer(new OTreeCllRndr());
         tree.addMouseListener(new MouseListener() {
@@ -209,6 +231,7 @@ public class Gui {
         scrollPaneTree = new JScrollPane(tree);
 
         pnlNorth = new JPanel();
+        pnlNorth.setBackground(GuiColours.PNL_IMG_CONTAINER_BACKGRND);
         GridBagLayout gbl_pnlNorth = new GridBagLayout();
         gbl_pnlNorth.columnWeights = new double[]{};
         gbl_pnlNorth.rowWeights = new double[]{};
@@ -223,6 +246,7 @@ public class Gui {
         JScrollPane scrollPaneNorth = new JScrollPane(pnlNorth);
 
         pnlSouth = new JPanel();
+        pnlSouth.setBackground(GuiColours.PNL_IMG_CONTAINER_BACKGRND);
         GridBagLayout gbl_pnlSouth = new GridBagLayout();
         gbl_pnlSouth.columnWeights = new double[]{};
         gbl_pnlSouth.rowWeights = new double[]{};
@@ -234,13 +258,14 @@ public class Gui {
         gbc_scrollPaneSouth.gridx = 0;
         gbc_scrollPaneSouth.gridy = 1;
         scrollPaneSouth = new JScrollPane(pnlSouth);
-        // spImages.add(scrollPaneSouth, gbc_scrollPaneSouth);
-        spImages = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPaneNorth, scrollPaneSouth);
+        spImages = new OSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPaneNorth, scrollPaneSouth);
         spImages.setResizeWeight(.5d);
         pnlViewContainer = new JPanel();
         pnlViewContainer.setLayout(new BorderLayout());
         pnlViewContainer.add(spImages);
-        spTreeImages = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, pnlViewContainer);
+        spTreeImages = new OSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, pnlViewContainer);
+        spTreeImages.setResizeWeight(0.2);
+        spTreeImages.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints gbc_splitPane = new GridBagConstraints();
         gbc_splitPane.anchor = GridBagConstraints.NORTH;
         gbc_splitPane.weighty = 1.0;

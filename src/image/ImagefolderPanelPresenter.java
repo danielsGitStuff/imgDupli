@@ -2,6 +2,7 @@ package image;
 
 import data.LeFile;
 import gui.Gui;
+import gui.GuiColours;
 import interfaces.IGuiEventHandler;
 import io.FsFile;
 
@@ -125,7 +126,7 @@ public class ImagefolderPanelPresenter {
         gbc.weighty = 1.0;
 
         ImagePanel imagePanel = imagePanelController.createImagePanel(file);
-        imagePanel.setBackground(Color.darkGray);
+        imagePanel.setBackground(GuiColours.PNL_IMG_BACKGRND);
         imagePanel.setPreferredSize(calcImageDimension());
 
         panel.add(imagePanel, gbc);
