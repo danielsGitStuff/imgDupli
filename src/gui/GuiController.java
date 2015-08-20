@@ -185,4 +185,9 @@ public class GuiController implements IDuplicateSearchListener, IGuiEventHandler
         presenter.enableRevert();
     }
 
+	@Override
+	public void onBtnToggleMenuClicked() {
+		presenter.toggleMenu();
+	}
+
 }

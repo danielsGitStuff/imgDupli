@@ -138,4 +138,8 @@ public class GuiPresenter {
         imagefolderPanelPresenter.setDuplicates(duplicates);
         imagefolderPanelPresenter.setFolderImages(otherImages);
     }
+
+	public void toggleMenu() {
+			
+	}
 }

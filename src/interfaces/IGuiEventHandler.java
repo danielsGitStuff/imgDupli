@@ -8,6 +8,7 @@ public interface IGuiEventHandler {
 	void onBtnStopClicked();
 	void onBtnRevertClicked();
 	void onBtnWriteClicked();
+	void onBtnToggleMenuClicked();
 	void onFileDeleteFilesEverywhereElse(LeFile leFile);
 	void onFileDeleteFile(LeFile leFile);
 	void onDirDeleteFilesEverywhereElse(Directory directory);
