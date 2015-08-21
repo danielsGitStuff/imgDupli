@@ -42,7 +42,7 @@ public class GuiPresenter {
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
-		gbc.insets =  new Insets(2, 2, 2, 2);
+		gbc.insets = new Insets(2, 2, 2, 2);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gui.pnlSettings.add(gui.progressBar, gbc);
 		gbc = new GridBagConstraints();
@@ -50,7 +50,7 @@ public class GuiPresenter {
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets =  new Insets(2, 2, 2, 5);
+		gbc.insets = new Insets(2, 2, 2, 5);
 		gui.btnWrite.setEnabled(false);
 		gui.btnRevert.setEnabled(false);
 		gui.pnlSettings.add(gui.btnStop, gbc);
@@ -77,13 +77,18 @@ public class GuiPresenter {
 	}
 
 	public void geraffel(DuplicationStructureBuilder structureBuilder) {
-		OTreeNode rootNode = new OTreeNode(structureBuilder.getRootDirectory());
 		Directory rootDirectory = structureBuilder.getRootDirectory();
-		fillNodes(rootDirectory, rootNode);
-		fillNodesFiles(rootDirectory, rootNode);
-
-		TreeModel treeModel = new DefaultTreeModel(rootNode);
-		gui.setTreeModel(treeModel);
+		if (rootDirectory != null) {
+			OTreeNode rootNode = new OTreeNode(rootDirectory);
+			fillNodes(rootDirectory, rootNode);
+			fillNodesFiles(rootDirectory, rootNode);
+			TreeModel treeModel = new DefaultTreeModel(rootNode);
+			gui.setTreeModel(treeModel);
+		}else {
+			// no copies found
+			gui.setTreeModel(null);
+		}
+		
 	}
 
 	public void geruffel() {
