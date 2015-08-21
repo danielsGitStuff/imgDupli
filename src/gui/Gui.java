@@ -42,17 +42,19 @@ public class Gui {
 	JButton btnStart;
 	JButton btnWrite;
 	JPanel pnlViewContainer;
-	private JPanel pnlSideBar;
-	private JToggleButton btnToggleMenu;
-	private JLayeredPane layeredPane;
-	private JLabel lblSearchSettings;
-	private JLabel lblPath_1;
-	private JLabel lblMisc;
+	JPanel pnlSideBar;
+	JToggleButton btnToggleMenu;
+	JLabel lblSearchSettings;
+	JLabel lblPath_1;
+	JLabel lblMisc;
+	OSplitPane spMenu;
+	JPanel containerMenu;
 
 	public Gui(IGuiEventHandler eventHandler) {
 		this.eventHandler = eventHandler;
 		progressBar = new JProgressBar();
 		btnStop = new JButton("Stop");
+		btnStop.setBackground(GuiColours.BTN_BACKGRND);
 		btnRevert = new JButton("Revert Changes");
 		btnRevert.setBackground(GuiColours.BTN_BACKGRND);
 		btnRevert.setEnabled(false);
@@ -66,7 +68,6 @@ public class Gui {
 		canvas.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
 		canvas.setLayout(gbl_canvas);
 		canvas.setVisible(false);
-		frame.getContentPane().add(canvas);
 
 		pnlSettings = new JPanel();
 		pnlSettings.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
@@ -79,7 +80,7 @@ public class Gui {
 		gbc_pnlSettings.gridy = 0;
 		canvas.add(pnlSettings, gbc_pnlSettings);
 		GridBagLayout gbl_pnlSettings = new GridBagLayout();
-		gbl_pnlSettings.columnWeights = new double[] { 0.01, 0.5, 0.5, 0.5 };
+		gbl_pnlSettings.columnWeights = new double[] { 0.01, 0.45, 0.05, 0.5, 0.5 };
 		pnlSettings.setLayout(gbl_pnlSettings);
 
 		btnStart = new JButton("Start");
@@ -90,12 +91,15 @@ public class Gui {
 		});
 		btnStop.addActionListener(e -> eventHandler.onBtnStopClicked());
 
-		btnToggleMenu = new JToggleButton("M");
+		btnToggleMenu = new JToggleButton("Settings");
+		btnToggleMenu.setBackground(GuiColours.BTN_BACKGRND);
 		GridBagConstraints gbc_tglbtnM = new GridBagConstraints();
 		gbc_tglbtnM.gridx = 0;
 		gbc_tglbtnM.gridy = 0;
+		btnToggleMenu.addActionListener(e -> eventHandler.onBtnToggleMenuClicked());
 		pnlSettings.add(btnToggleMenu, gbc_tglbtnM);
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
+		gbc_btnStart.gridwidth = 2;
 		gbc_btnStart.insets = new Insets(2, 2, 2, 5);
 		gbc_btnStart.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnStart.gridx = 1;
@@ -109,13 +113,13 @@ public class Gui {
 		GridBagConstraints gbc_btnWrite = new GridBagConstraints();
 		gbc_btnWrite.insets = new Insets(2, 2, 2, 2);
 		gbc_btnWrite.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnWrite.gridx = 3;
+		gbc_btnWrite.gridx = 4;
 		gbc_btnWrite.gridy = 0;
 		pnlSettings.add(btnWrite, gbc_btnWrite);
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.insets = new Insets(2, 2, 2, 5);
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.gridx = 2;
+		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridy = 0;
 		pnlSettings.add(btnRevert, gridBagConstraints);
 
@@ -193,7 +197,7 @@ public class Gui {
 		pnlViewContainer.add(spImages);
 		spTreeImages = new OSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, pnlViewContainer);
 		spTreeImages.setResizeWeight(0.2);
-		spTreeImages.setBackground(Color.LIGHT_GRAY);
+		spTreeImages.setBackground(GuiColours.TREE_BACKGRND);
 		GridBagConstraints gbc_splitPane = new GridBagConstraints();
 		gbc_splitPane.insets = new Insets(0, 2, 2, 2);
 		gbc_splitPane.anchor = GridBagConstraints.NORTH;
@@ -201,13 +205,30 @@ public class Gui {
 		gbc_splitPane.fill = GridBagConstraints.BOTH;
 		gbc_splitPane.gridx = 0;
 		gbc_splitPane.gridy = 1;
-		
-		layeredPane = new JLayeredPane();
+
 		canvas.add(spTreeImages, gbc_splitPane);
 
 		/*
 		 * SideBar stuff comes here
 		 */
+		String pathText = System.getProperty("user.home");
+		GridBagConstraints gbc_lblSearchSettings = new GridBagConstraints();
+		gbc_lblSearchSettings.gridwidth = 2;
+		gbc_lblSearchSettings.insets = new Insets(0, 0, 5, 0);
+		gbc_lblSearchSettings.gridx = 0;
+		gbc_lblSearchSettings.gridy = 0;
+
+		btnWrite.addActionListener(e -> eventHandler.onBtnWriteClicked());
+		btnRevert.addActionListener(e -> eventHandler.onBtnRevertClicked());
+		containerMenu = new JPanel();
+		GridBagLayout gbl_containerMenu = new GridBagLayout();
+		gbl_containerMenu.columnWidths = new int[] {0 };
+		gbl_containerMenu.rowHeights = new int[] { 0 };
+		gbl_containerMenu.columnWeights = new double[] { 0.0};
+		gbl_containerMenu.rowWeights = new double[] { 0.0  };
+		containerMenu.setLayout(gbl_containerMenu);
+		containerMenu.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
+		spMenu = new OSplitPane(JSplitPane.HORIZONTAL_SPLIT, containerMenu, canvas);
 
 		JButton btnPath = new JButton("Choose");
 		btnPath.setBackground(GuiColours.BTN_BACKGRND);
@@ -226,7 +247,7 @@ public class Gui {
 			}
 		});
 		GridBagConstraints gbc_btnPath = new GridBagConstraints();
-		gbc_btnPath.insets = new Insets(2, 2, 5, 0);
+		gbc_btnPath.insets = new Insets(2, 2, 2, 2);
 		gbc_btnPath.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnPath.gridx = 1;
 		gbc_btnPath.gridy = 2;
@@ -234,10 +255,9 @@ public class Gui {
 		txtPath = new JTextField();
 		txtPath.setBorder(BorderFactory.createEmptyBorder());
 		txtPath.setBackground(GuiColours.TXTEDIT_BACKGRND);
-		String pathText = System.getProperty("user.home");
 		txtPath.setText(pathText);
 		GridBagConstraints gbc_txtPath = new GridBagConstraints();
-		gbc_txtPath.insets = new Insets(2, 2, 5, 0);
+		gbc_txtPath.insets = new Insets(2, 2, 2, 2);
 		gbc_txtPath.fill = GridBagConstraints.BOTH;
 		gbc_txtPath.weightx = 0.5;
 		gbc_txtPath.gridx = 1;
@@ -246,24 +266,20 @@ public class Gui {
 
 		pnlSideBar = new JPanel();
 		pnlSideBar.setBackground(GuiColours.PNL_MENU);
-		frame.getContentPane().add(pnlSideBar, BorderLayout.SOUTH);
+		// frame.getContentPane().add(pnlSideBar, BorderLayout.SOUTH);
 		GridBagLayout gbl_pnlSideBar = new GridBagLayout();
 		gbl_pnlSideBar.columnWidths = new int[] { 0, 0 };
 		gbl_pnlSideBar.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_pnlSideBar.columnWeights = new double[] { Double.MIN_VALUE, 0.0 };
+		gbl_pnlSideBar.columnWeights = new double[] { 0.0, 0.0 };
 		gbl_pnlSideBar.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		pnlSideBar.setLayout(gbl_pnlSideBar);
 
-		lblSearchSettings = new JLabel("Search Settings");
+		lblSearchSettings = new JLabel("Settings");
 		lblSearchSettings.setForeground(GuiColours.LBL_MENU_MAIN_FORE);
-		GridBagConstraints gbc_lblSearchSettings = new GridBagConstraints();
-		gbc_lblSearchSettings.gridwidth = 2;
-		gbc_lblSearchSettings.insets = new Insets(0, 0, 5, 0);
-		gbc_lblSearchSettings.gridx = 0;
-		gbc_lblSearchSettings.gridy = 0;
 		JPanel pnlLblSearchSettings = new JPanel();
 		pnlLblSearchSettings.setBackground(GuiColours.LBL_MENU_MAIN_BACKGRND);
 		GridBagConstraints gbc_pnlLblSearchSettings = new GridBagConstraints();
+		gbc_pnlLblSearchSettings.weightx = 0.5;
 		gbc_pnlLblSearchSettings.fill = GridBagConstraints.HORIZONTAL;
 		gbc_pnlLblSearchSettings.insets = new Insets(0, 0, 5, 0);
 		gbc_pnlLblSearchSettings.anchor = GridBagConstraints.NORTH;
@@ -272,7 +288,7 @@ public class Gui {
 		gbc_pnlLblSearchSettings.gridy = 0;
 		pnlSideBar.add(pnlLblSearchSettings, gbc_pnlLblSearchSettings);
 		pnlLblSearchSettings.add(lblSearchSettings);
-//		pnlSideBar.add(lblSearchSettings, gbc_lblSearchSettings);
+		// pnlSideBar.add(lblSearchSettings, gbc_lblSearchSettings);
 
 		lblPath_1 = new JLabel("Path");
 		GridBagConstraints gbc_lblPath_1 = new GridBagConstraints();
@@ -280,19 +296,14 @@ public class Gui {
 		gbc_lblPath_1.anchor = GridBagConstraints.EAST;
 		gbc_lblPath_1.gridx = 0;
 		gbc_lblPath_1.gridy = 1;
-		
-		
 
-		
-		
 		pnlSideBar.add(lblPath_1, gbc_lblPath_1);
 		pnlSideBar.add(btnPath, gbc_btnPath);
 		pnlSideBar.add(txtPath, gbc_txtPath);
 
 		lblMisc = new JLabel("Misc");
 		lblMisc.setForeground(GuiColours.LBL_MENU_MAIN_FORE);
-		
-		
+
 		JPanel pnlLblMisc = new JPanel();
 		pnlLblMisc.setBackground(GuiColours.LBL_MENU_MAIN_BACKGRND);
 		GridBagConstraints gbc_pnlLblMisc = new GridBagConstraints();
@@ -304,14 +315,13 @@ public class Gui {
 		gbc_pnlLblMisc.gridy = 4;
 		pnlLblMisc.add(lblMisc);
 		pnlSideBar.add(pnlLblMisc, gbc_pnlLblMisc);
-		
 
 		txtFileThreadRatio = new JTextField();
 		txtFileThreadRatio.setText("200");
 		txtFileThreadRatio.setBorder(BorderFactory.createEmptyBorder());
 		txtFileThreadRatio.setBackground(GuiColours.TXTEDIT_BACKGRND);
 		GridBagConstraints gbc_txtFileThreadRatio = new GridBagConstraints();
-		gbc_txtFileThreadRatio.insets = new Insets(2, 2, 0, 0);
+		gbc_txtFileThreadRatio.insets = new Insets(2, 2, 2, 2);
 		gbc_txtFileThreadRatio.fill = GridBagConstraints.BOTH;
 		gbc_txtFileThreadRatio.anchor = GridBagConstraints.WEST;
 		gbc_txtFileThreadRatio.gridx = 1;
@@ -320,7 +330,7 @@ public class Gui {
 		pnlSideBar.add(txtFileThreadRatio, gbc_txtFileThreadRatio);
 
 		JLabel lblFileTypes = new JLabel("file types");
-//		lblFileTypes.setForeground(GuiColours.LBL_MENU);
+		// lblFileTypes.setForeground(GuiColours.LBL_MENU);
 		GridBagConstraints gbc_fileTypes = new GridBagConstraints();
 		gbc_fileTypes.insets = new Insets(0, 5, 5, 5);
 		gbc_fileTypes.anchor = GridBagConstraints.EAST;
@@ -333,7 +343,7 @@ public class Gui {
 		txtFileTypes.setBackground(GuiColours.TXTEDIT_BACKGRND);
 		txtFileTypes.setText("jpg,jpeg,png,bmp,psd");
 		GridBagConstraints gbc_txtFileTypes = new GridBagConstraints();
-		gbc_txtFileTypes.insets = new Insets(2, 2, 5, 0);
+		gbc_txtFileTypes.insets = new Insets(2, 2, 2, 2);
 		gbc_txtFileTypes.fill = GridBagConstraints.BOTH;
 		gbc_txtFileTypes.gridx = 1;
 		gbc_txtFileTypes.gridy = 3;
@@ -349,9 +359,20 @@ public class Gui {
 		gbc_ThreadRatio.gridx = 0;
 		gbc_ThreadRatio.gridy = 5;
 		pnlSideBar.add(lblThreadRatio, gbc_ThreadRatio);
-
-		btnWrite.addActionListener(e -> eventHandler.onBtnWriteClicked());
-		btnRevert.addActionListener(e -> eventHandler.onBtnRevertClicked());
+		GridBagConstraints gbc_pnlSideBar = new GridBagConstraints();
+		gbc_pnlSideBar.weighty = 1.0;
+		gbc_pnlSideBar.weightx = 1.0;
+		gbc_pnlSideBar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pnlSideBar.insets = new Insets(0, 0, 0, 5);
+		gbc_pnlSideBar.anchor = GridBagConstraints.NORTH;
+		gbc_pnlSideBar.gridx = 0;
+		gbc_pnlSideBar.gridy = 0;
+		containerMenu.add(pnlSideBar, gbc_pnlSideBar);
+		containerMenu.setVisible(false);
+		spMenu.setResizeWeight(0.0);
+		spMenu.setDividerSize(0);
+		frame.getContentPane().add(spMenu, BorderLayout.CENTER);
+		spMenu.repaint();
 	}
 
 	public JSplitPane getSpTreeImages() {
@@ -418,36 +439,6 @@ public class Gui {
 		});
 	}
 
-	public void showProgressStuff() {
-		pnlSettings.remove(btnStart);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 3;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		pnlSettings.add(progressBar, gbc);
-		gbc = new GridBagConstraints();
-		gbc.gridx = 3;
-		gbc.gridy = 1;
-		gbc.gridwidth = 1;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		pnlSettings.add(btnStop, gbc);
-		pnlSettings.validate();
-		pnlSettings.repaint();
-	}
-
-	public void hideProgressStuff() {
-		pnlSettings.remove(btnStop);
-		pnlSettings.remove(progressBar);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 4;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		pnlSettings.add(btnStart, gbc);
-		pnlSettings.validate();
-		pnlSettings.repaint();
-	}
 
 	public void enableWrite() {
 		btnWrite.setEnabled(true);

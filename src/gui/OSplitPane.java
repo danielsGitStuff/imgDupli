@@ -21,7 +21,7 @@ public class OSplitPane extends JSplitPane {
 		setBorder(BorderFactory.createEmptyBorder());
 		setUI(new BasicSplitPaneUI() {
 			public BasicSplitPaneDivider createDefaultDivider() {
-				return new BasicSplitPaneDivider(this) {
+				BasicSplitPaneDivider divider = new BasicSplitPaneDivider(this) {
 					public void setBorder(Border b) {
 					}
 
@@ -32,8 +32,10 @@ public class OSplitPane extends JSplitPane {
 						super.paint(g);
 					}
 				};
+				return divider;
 			}
 		});
+
 	}
 
 }
