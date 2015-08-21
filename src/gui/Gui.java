@@ -246,7 +246,7 @@ public class Gui {
 			}
 		});
 		GridBagConstraints gbc_btnPath = new GridBagConstraints();
-		gbc_btnPath.insets = new Insets(2, 2, 2, 2);
+		gbc_btnPath.insets = new Insets(2, 2, 7, 2);
 		gbc_btnPath.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnPath.gridx = 1;
 		gbc_btnPath.gridy = 2;
@@ -256,7 +256,7 @@ public class Gui {
 		txtPath.setBackground(GuiColours.TXTEDIT_BACKGRND);
 		txtPath.setText(pathText);
 		GridBagConstraints gbc_txtPath = new GridBagConstraints();
-		gbc_txtPath.insets = new Insets(2, 2, 2, 2);
+		gbc_txtPath.insets = new Insets(0, 0, 5, 0);
 		gbc_txtPath.fill = GridBagConstraints.BOTH;
 		gbc_txtPath.weightx = 0.5;
 		gbc_txtPath.gridx = 1;
@@ -291,7 +291,7 @@ public class Gui {
 
 		lblPath_1 = new JLabel("Path");
 		GridBagConstraints gbc_lblPath_1 = new GridBagConstraints();
-		gbc_lblPath_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPath_1.insets = new Insets(2, 2, 5, 5);
 		gbc_lblPath_1.anchor = GridBagConstraints.EAST;
 		gbc_lblPath_1.gridx = 0;
 		gbc_lblPath_1.gridy = 1;
@@ -320,7 +320,7 @@ public class Gui {
 		txtFileThreadRatio.setBorder(BorderFactory.createEmptyBorder());
 		txtFileThreadRatio.setBackground(GuiColours.TXTEDIT_BACKGRND);
 		GridBagConstraints gbc_txtFileThreadRatio = new GridBagConstraints();
-		gbc_txtFileThreadRatio.insets = new Insets(2, 2, 2, 2);
+		gbc_txtFileThreadRatio.insets = new Insets(0, 0, 5, 0);
 		gbc_txtFileThreadRatio.fill = GridBagConstraints.BOTH;
 		gbc_txtFileThreadRatio.anchor = GridBagConstraints.WEST;
 		gbc_txtFileThreadRatio.gridx = 1;
@@ -331,7 +331,7 @@ public class Gui {
 		JLabel lblFileTypes = new JLabel("file types");
 		// lblFileTypes.setForeground(GuiColours.LBL_MENU);
 		GridBagConstraints gbc_fileTypes = new GridBagConstraints();
-		gbc_fileTypes.insets = new Insets(0, 5, 5, 5);
+		gbc_fileTypes.insets = new Insets(2, 2, 5, 5);
 		gbc_fileTypes.anchor = GridBagConstraints.EAST;
 		gbc_fileTypes.gridx = 0;
 		gbc_fileTypes.gridy = 3;
@@ -342,7 +342,7 @@ public class Gui {
 		txtFileTypes.setBackground(GuiColours.TXTEDIT_BACKGRND);
 		txtFileTypes.setText("jpg,jpeg,png,bmp,psd");
 		GridBagConstraints gbc_txtFileTypes = new GridBagConstraints();
-		gbc_txtFileTypes.insets = new Insets(2, 2, 2, 2);
+		gbc_txtFileTypes.insets = new Insets(0, 0, 5, 0);
 		gbc_txtFileTypes.fill = GridBagConstraints.BOTH;
 		gbc_txtFileTypes.gridx = 1;
 		gbc_txtFileTypes.gridy = 3;
@@ -353,7 +353,7 @@ public class Gui {
 		JLabel lblThreadRatio = new JLabel("F/T Ratio");
 		lblThreadRatio.setToolTipText("File to Thread Ratio");
 		GridBagConstraints gbc_ThreadRatio = new GridBagConstraints();
-		gbc_ThreadRatio.insets = new Insets(5, 5, 5, 5);
+		gbc_ThreadRatio.insets = new Insets(2, 2, 5, 5);
 		gbc_ThreadRatio.anchor = GridBagConstraints.EAST;
 		gbc_ThreadRatio.gridx = 0;
 		gbc_ThreadRatio.gridy = 5;
