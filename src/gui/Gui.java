@@ -61,7 +61,6 @@ public class Gui {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setBackground(Color.white);
-		frame.setSize(1024, 768);
 		GridBagLayout gbl_canvas = new GridBagLayout();
 		gbl_canvas.rowWeights = new double[] { 0.0, 1.0 };
 		gbl_canvas.columnWeights = new double[] { 1.0 };
@@ -222,10 +221,10 @@ public class Gui {
 		btnRevert.addActionListener(e -> eventHandler.onBtnRevertClicked());
 		containerMenu = new JPanel();
 		GridBagLayout gbl_containerMenu = new GridBagLayout();
-		gbl_containerMenu.columnWidths = new int[] {0 };
+		gbl_containerMenu.columnWidths = new int[] { 0 };
 		gbl_containerMenu.rowHeights = new int[] { 0 };
-		gbl_containerMenu.columnWeights = new double[] { 0.0};
-		gbl_containerMenu.rowWeights = new double[] { 0.0  };
+		gbl_containerMenu.columnWeights = new double[] { 0.0 };
+		gbl_containerMenu.rowWeights = new double[] { 0.0 };
 		containerMenu.setLayout(gbl_containerMenu);
 		containerMenu.setBackground(GuiColours.PNL_CONTAINER_BACKGR);
 		spMenu = new OSplitPane(JSplitPane.HORIZONTAL_SPLIT, containerMenu, canvas);
@@ -372,7 +371,7 @@ public class Gui {
 		spMenu.setResizeWeight(0.0);
 		spMenu.setDividerSize(0);
 		frame.getContentPane().add(spMenu, BorderLayout.CENTER);
-		spMenu.repaint();
+		frame.setSize(1024, 768);
 	}
 
 	public JSplitPane getSpTreeImages() {
@@ -438,7 +437,6 @@ public class Gui {
 			tree.repaint();
 		});
 	}
-
 
 	public void enableWrite() {
 		btnWrite.setEnabled(true);
