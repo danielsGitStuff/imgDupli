@@ -1,8 +1,9 @@
 package main;
 
-import java.io.File;
 import java.io.FileFilter;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import tools.Tools;
 
@@ -10,7 +11,7 @@ public class Settings {
 
 	private int fileThreadRatio;
 	private String rootPath;
-	private List<String> fileTypes;
+	private Set<String> fileTypes;
 
 	public int getFileThreadRatio() {
 		return fileThreadRatio;
@@ -28,11 +29,11 @@ public class Settings {
 		this.rootPath = rootPath;
 	}
 
-	public void setFileTypes(List<String> fileTypes) {
-		this.fileTypes = fileTypes;
+	public void setFileTypes(Collection<String> fileTypes) {
+		this.fileTypes = new HashSet<>(fileTypes);
 	}
 
-	private List<String> getFileTypes() {
+	private Set<String> getFileTypes() {
 		return fileTypes;
 	}
 

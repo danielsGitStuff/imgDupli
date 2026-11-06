@@ -1,14 +1,14 @@
 package tools;
 
+import jakarta.xml.bind.annotation.adapters.HexBinaryAdapter;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 public class Hash {
 
