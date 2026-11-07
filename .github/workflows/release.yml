@@ -1,11 +1,11 @@
 name: Release
 
-# Push a tag like v0.1.0 to build, test and publish a GitHub release with the runnable jar.
+# Publish a release on the GitHub website (Releases -> Draft a new release, tag like v0.1.0).
+# This workflow then builds and tests the jar and attaches imgDupli.jar to that release.
 # "Run workflow" in the Actions tab builds the same jar as a downloadable artifact without releasing.
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -24,8 +24,10 @@ jobs:
           cache: maven
 
       - name: Set version from tag
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: mvn -B -q versions:set -DnewVersion="${GITHUB_REF_NAME#v}" -DgenerateBackupPoms=false
+        if: github.event_name == 'release'
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: mvn -B -q versions:set -DnewVersion="${TAG#v}" -DgenerateBackupPoms=false
 
       - name: Build and test
         run: mvn -B package
@@ -39,12 +41,9 @@ jobs:
           name: imgDupli
           path: imgDupli.jar
 
-      - name: Publish GitHub release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Attach jar to the release
+        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "$GITHUB_REF_NAME" imgDupli.jar \
-            --title "imgDupli $GITHUB_REF_NAME" \
-            --generate-notes \
-            --notes "Requires Java 17 or newer. Start with: java -jar imgDupli.jar (or double-click)."
+          TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$TAG" imgDupli.jar --clobber
