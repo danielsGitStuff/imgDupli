@@ -3,6 +3,7 @@ package tree;
 import io.FsRelated;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.util.Vector;
 
 public class OTreeNode extends DefaultMutableTreeNode {
@@ -18,7 +19,7 @@ public class OTreeNode extends DefaultMutableTreeNode {
             parent.removeOTreeNode(this);
         }
         if (children != null) {
-            Vector children = (Vector) this.children.clone();
+            Vector<TreeNode> children =  new Vector<>(this.children);
             children.forEach(child -> ((OTreeNode) child).check());
         }
     }

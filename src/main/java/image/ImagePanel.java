@@ -54,11 +54,6 @@ public class ImagePanel extends JPanel {
         this.canvas = new JLabel();
     }
 
-    public void reset() {
-        imageByteArray = null;
-        imageFile = null;
-    }
-
     byte[] read() {
 
         if (imageByteArray == null) {
@@ -90,14 +85,15 @@ public class ImagePanel extends JPanel {
      * called by ImageRunnable
      */
     void onImageProcessed(Image image) {
-        ImageIcon icon = new ImageIcon(image);
-        canvas = new JLabel(icon);
+        // null: panel had no size yet or the format could not be decoded (e.g. psd, dng)
+        canvas = (image == null)
+                ? new JLabel(imageFile == null ? "" : imageFile.getName(), SwingConstants.CENTER)
+                : new JLabel(new ImageIcon(image));
         canvas.setBackground(Color.PINK);
         removeAll();
         add(canvas);
-        canvas.repaint();
-        validate();
-        paintAll(getGraphics());
+        revalidate();
+        repaint();
     }
 
     public void paintComponent(Graphics g) {

@@ -7,9 +7,9 @@ import java.util.HashSet;
 
 public class Directory extends FsRelated {
     private Directory parentDirectory;
-    private HashSet<Directory> subDirectories = new HashSet<>();
-    private HashSet<LeFile> leFiles = new HashSet<>();
-    private FsDirectory fsDirectory;
+    private final HashSet<Directory> subDirectories = new HashSet<>();
+    private final HashSet<LeFile> leFiles = new HashSet<>();
+    private final FsDirectory fsDirectory;
 
     public Directory(FsDirectory fsDirectory) {
         this.fsDirectory = fsDirectory;
@@ -40,7 +40,6 @@ public class Directory extends FsRelated {
         return "[" + fsDirectory.getPath() + "]";
     }
 
-    @Override
     public void resetFlags() {
         highlighted = false;
         subDirectories.forEach(Directory::resetFlags);
@@ -75,7 +74,7 @@ public class Directory extends FsRelated {
     }
 
     private void checkRemoval() {
-        if (subDirectories.size() == 0 && leFiles.size() == 0 && parentDirectory != null) {
+        if (subDirectories.isEmpty() && leFiles.isEmpty() && parentDirectory != null) {
             parentDirectory.removeSubDirectory(this);
             hide();
         }

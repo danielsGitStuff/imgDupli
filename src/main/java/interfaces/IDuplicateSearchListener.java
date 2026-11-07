@@ -4,7 +4,7 @@ import data.DuplicationStructureBuilder;
 
 public interface IDuplicateSearchListener {
 
-    void onAllInterestingFilesFound(int sum);
+    void onAllInterestingFilesFound(@SuppressWarnings("unused") int sum);
 
     void onCompleted(DuplicationStructureBuilder structureBuilder);
 

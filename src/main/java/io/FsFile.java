@@ -8,7 +8,7 @@ import java.io.File;
 @SuppressWarnings("serial")
 public class FsFile extends File implements IFileRepresentation {
 
-    private String filePath;
+    private final String filePath;
     private boolean markedForDeletion = false;
     private FsDirectory fsDirectory;
     private String hash;
@@ -58,16 +58,22 @@ public class FsFile extends File implements IFileRepresentation {
 
     }
 
+    /**
+     * Identity is the path, never the content hash: two copies of the same image
+     * share a hash but are different files. The mutable fields (hash, markedForDeletion,
+     * fsDirectory) are deliberately left out so the hashCode never changes while the
+     * object sits in a HashSet/HashMap.
+     * Delegates to File so path comparison follows the platform rules
+     * (case-insensitive on Windows) and stays symmetric with plain File objects.
+     */
     @Override
     public boolean equals(Object obj) {
-        System.out.println("FsFile.equals()");
-        if (obj instanceof FsFile) {
-            FsFile f = (FsFile) obj;
-            if (hash != null && f.hash != null) {
-                return f.hash.equals(hash);
-            }
-        }
-        return false;
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public void write(ICustomFileGlobalStorage globalStorage) {

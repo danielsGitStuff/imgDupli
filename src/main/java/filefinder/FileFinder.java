@@ -62,7 +62,9 @@ public class FileFinder {
             e.printStackTrace();
         }
         System.out.println("hash things done");
-        searchController.onHashingDone(this);
+        if (!Thread.currentThread().isInterrupted())
+            searchController.onHashingDone(this);
+        finderExecutor.shutdown();
     }
 
     public Settings getSettings() {
@@ -73,7 +75,7 @@ public class FileFinder {
         return resultMap;
     }
 
-    public void submit(HashRunnable hashRunnable) {
+    public void addRunnable(HashRunnable hashRunnable) {
         hashRunnables.add(hashRunnable);
     }
 

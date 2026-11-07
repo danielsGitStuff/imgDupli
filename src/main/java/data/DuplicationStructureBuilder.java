@@ -19,7 +19,7 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
     private Map<FsDirectory, Directory> fileSystemDirectoryMap = new HashMap<>();
 
     /**
-     * @param root
+     * @param root where it all starts
      * @param hashCollisions <String, List<>> ... String is hash value
      */
     public DuplicationStructureBuilder(FsDirectory root, Map<String, List<File>> hashCollisions) {
@@ -43,23 +43,16 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
         }
     }
 
-    private void traverseToRoot(FsFile fsFile) {
-        FsDirectory fsDirectory = fsFile.getFsDirectory();
-        if (fsDirectory != null) {
-            traverseToRoot(fsDirectory);
-        }
-    }
-
     public void rebuildDirectoryGraph() {
         forget();
         traverseDownReset(root);
         // it is rebuilt but there might be single files in it
-        hashRelatedLeFileStorage.getSingles().forEach(f -> f.hide());
+        hashRelatedLeFileStorage.getSingles().forEach(LeFile::hide);
     }
 
     public void forget() {
         fileSystemDirectoryMap = new HashMap<>();
-        hashRelatedLeFileStorage = new HashRelatedFileStorage();
+        hashRelatedLeFileStorage = new HashRelatedFileStorage<>();
         fileSystemDirectoryMap.put(root, new Directory(root));
     }
 
@@ -77,7 +70,7 @@ public class DuplicationStructureBuilder implements ICustomFileGlobalStorage {
 
     private void build(Map<String, List<File>> hashCollisions) {
         fileSystemDirectoryMap = new HashMap<>();
-        hashRelatedLeFileStorage = new HashRelatedFileStorage();
+        hashRelatedLeFileStorage = new HashRelatedFileStorage<>();
         hashRelatedCustomFileStorage = new HashRelatedFileStorage<>();
         hashCollisions.keySet().forEach(hash -> {
             List<File> files = hashCollisions.get(hash);

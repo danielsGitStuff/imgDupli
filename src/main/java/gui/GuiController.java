@@ -9,6 +9,7 @@ import io.FsDirectory;
 import main.SearchController;
 import main.Settings;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,8 +33,6 @@ public class GuiController implements IDuplicateSearchListener, IGuiEventHandler
         presenter.show();
     }
 
-
-
     private void highlightFile(LeFile f) {
         f.highlight();
         Directory directory = f.getDirectory();
@@ -56,7 +55,7 @@ public class GuiController implements IDuplicateSearchListener, IGuiEventHandler
         HashSet<String> hashes = directory.getHashes();
         hashes.forEach(hash -> {
             HashSet<LeFile> files = structureBuilder.getHashRelatedLeFiles(hash);
-            if (files != null && files.size() > 0) {
+            if (files != null && !files.isEmpty()) {
                 LeFile f = files.iterator().next();
                 files.forEach(this::highlightFile);
                 duplicates.add(f);
@@ -75,24 +74,29 @@ public class GuiController implements IDuplicateSearchListener, IGuiEventHandler
     @Override
     public void onCompleted(DuplicationStructureBuilder structureBuilder) {
         this.structureBuilder = structureBuilder;
-        presenter.geraffel(structureBuilder);
-        presenter.hideProgressStuff();
+        SwingUtilities.invokeLater(() -> {
+            presenter.geraffel(structureBuilder);
+            presenter.hideProgressStuff();
+        });
     }
 
     @Override
     public void onSearchAborted() {
         presenter.hideProgressStuff();
-
     }
 
     @Override
     public void onFileHashed(int count) {
-        presenter.showFilesProcessed(count);
+        SwingUtilities.invokeLater(() -> {
+            presenter.showFilesProcessed(count);
+        });
     }
 
     @Override
     public void onInterestingFileFound(int interestingFilesCount) {
-        presenter.showFoundFilesCount(interestingFilesCount);
+        SwingUtilities.invokeLater(() -> {
+            presenter.showFoundFilesCount(interestingFilesCount);
+        });
     }
 
     @Override
@@ -185,9 +189,9 @@ public class GuiController implements IDuplicateSearchListener, IGuiEventHandler
         presenter.enableRevert();
     }
 
-	@Override
-	public void onBtnToggleMenuClicked() {
-		presenter.toggleMenu();
-	}
+    @Override
+    public void onBtnToggleMenuClicked() {
+        presenter.toggleMenu();
+    }
 
 }

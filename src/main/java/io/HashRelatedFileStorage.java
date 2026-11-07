@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class HashRelatedFileStorage<T extends IFileRepresentation> {
-    private Map<String, HashSet<T>> hashLeFileMap = new HashMap<>();
-    private Map<String, HashSet<T>> backup = new HashMap<>();
+    private final Map<String, HashSet<T>> hashLeFileMap = new HashMap<>();
 
     public void put(String hash, T file) {
         if (hashLeFileMap.containsKey(hash)) {
@@ -43,23 +42,12 @@ public class HashRelatedFileStorage<T extends IFileRepresentation> {
         return result != null && result.size() > 1;
     }
 
-    public void backup() {
-        backup = new HashMap<>();
-        hashLeFileMap.forEach((hash, hashset) -> backup.put(hash, new HashSet<>(hashset)));
-
-    }
-
-    public void restore() {
-        hashLeFileMap = backup;
-        backup = null;
-    }
-
     public void removeFile(T leFile) {
         HashSet<T> copies = hashLeFileMap.get(leFile.getHash());
         if (copies != null) {
             copies.remove(leFile);
             if (copies.size() < 2) {
-                copies.forEach(f -> f.hide());
+                copies.forEach(IFileRepresentation::hide);
                 hashLeFileMap.remove(leFile.getHash());
             }
         }

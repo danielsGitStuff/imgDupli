@@ -20,8 +20,4 @@ public abstract class FsRelated {
         highlighted = true;
     }
 
-    public void resetFlags() {
-        hidden = highlighted = false;
-    }
-
 }

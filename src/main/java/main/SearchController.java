@@ -61,7 +61,7 @@ public class SearchController implements ISearchController {
 
     @Override
     public void onSearchAborted() {
-        searchListeners.forEach(l -> l.onSearchAborted());
+        searchListeners.forEach(IDuplicateSearchListener::onSearchAborted);
     }
 
     @Override

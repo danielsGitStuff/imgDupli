@@ -15,9 +15,8 @@ public class OJTree extends JTree {
 		Object ins = treeNode.getUserObject();
 		if (ins instanceof FsDirectory) {
 			return ((FsDirectory) ins).getPath();
-		} else if (ins instanceof FsFile) {
-			FsFile file = (FsFile) ins;
-			if (file.isMarkedForDeletion()) {
+		} else if (ins instanceof FsFile file) {
+            if (file.isMarkedForDeletion()) {
 				return "deleted!";
 			}
 			return (file.getName());

@@ -5,7 +5,7 @@ import io.FsFile;
 import io.FsRelated;
 
 public class LeFile extends FsRelated implements IFileRepresentation {
-	private FsFile fsFile;
+	private final FsFile fsFile;
 	private Directory directory;
 
 

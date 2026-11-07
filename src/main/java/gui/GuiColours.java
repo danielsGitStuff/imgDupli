@@ -2,9 +2,6 @@ package gui;
 
 import java.awt.Color;
 
-import javax.swing.BorderFactory;
-import javax.swing.border.Border;
-
 public class GuiColours {
 	private static final Color VERY_BACKGROUND_BACKGRND = Color.GRAY;
 	private static final Color BACKGROUND_BACKGRND = Color.LIGHT_GRAY;
@@ -23,6 +20,6 @@ public class GuiColours {
 	public static final Color PNL_MENU = BACKGROUND_BACKGRND;
 	public static final Color LBL_MENU_MAIN_BACKGRND = VERY_BACKGROUND_BACKGRND;
 	public static final Color LBL_MENU_MAIN_FORE = Color.WHITE;
-	public static final Color LBL_MENU = null;
+	public static final Color LBL_MENU = Color.BLACK;
 
 }

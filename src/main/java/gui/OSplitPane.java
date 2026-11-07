@@ -13,18 +13,17 @@ public class OSplitPane extends JSplitPane {
 		setBorder(BorderFactory.createEmptyBorder());
 		setUI(new BasicSplitPaneUI() {
 			public BasicSplitPaneDivider createDefaultDivider() {
-				BasicSplitPaneDivider divider = new BasicSplitPaneDivider(this) {
-					public void setBorder(Border b) {
-					}
+                return new BasicSplitPaneDivider(this) {
+                    public void setBorder(Border b) {
+                    }
 
-					@Override
-					public void paint(Graphics g) {
-						g.setColor(GuiColours.SPLTPNE_SLIDER);
-						g.fillRect(0, 0, getSize().width, getSize().height);
-						super.paint(g);
-					}
-				};
-				return divider;
+                    @Override
+                    public void paint(Graphics g) {
+                        g.setColor(GuiColours.SPLTPNE_SLIDER);
+                        g.fillRect(0, 0, getSize().width, getSize().height);
+                        super.paint(g);
+                    }
+                };
 			}
 		});
 

@@ -17,13 +17,13 @@ public class HashRunnable implements Runnable {
 
     @Override
     public void run() {
-        try {
-            for (File file : files) {
+        for (File file : files) {
+            try {
                 String hash = Hash.md5(file);
                 resultMap.put(hash, file);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         System.out.println("hashrunnable.finish :) " + files.size());
     }

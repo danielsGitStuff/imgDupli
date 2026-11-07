@@ -20,9 +20,8 @@ public class OTreeCllRndr extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
 		Object userObject = treeNode.getUserObject();
 
-		if (userObject instanceof FsRelated) {
-			FsRelated ifsRelated = (FsRelated) userObject;
-			Font f = getFont();
+		if (userObject instanceof FsRelated ifsRelated) {
+            Font f = getFont();
 			if (ifsRelated.isHighlighted()) {
 				setForeground(GuiColours.SELECTED_FOREGROUND);
 				setFont(f.deriveFont(f.getStyle() | Font.BOLD));

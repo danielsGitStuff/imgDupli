@@ -9,9 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import data.ConcurrentResultMap;
-import data.DuplicationStructureBuilder;
 import filefinder.FileFinder;
-import interfaces.IDuplicateSearchListener;
 
 public class TestConcurrentResultMap implements ISearchController {
 

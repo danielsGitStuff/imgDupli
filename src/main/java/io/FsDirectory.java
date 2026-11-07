@@ -40,7 +40,7 @@ public class FsDirectory {
 		if (fPath.startsWith(aPath)) {
 			fPath = fPath.substring(aPath.length() + FS_SEPARATOR.length(), fPath.length());
 		}
-		if (fPath.length() == 0) {
+		if (fPath.isEmpty()) {
 			return target;
 		}
 		// is it a dir?

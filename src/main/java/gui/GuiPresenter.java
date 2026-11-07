@@ -9,7 +9,6 @@ import image.ImagefolderPanelPresenter;
 import main.Settings;
 import tree.OTreeNode;
 
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -18,7 +17,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class GuiPresenter {
 
@@ -26,13 +24,12 @@ public class GuiPresenter {
 	private final Gui gui;
 	private final ImagefolderPanelPresenter imagefolderPanelPresenter;
 	private final ImagePanelController imagePanelController = new ImagePanelController();
-	private ListSelectionListener listSelectionListener;
-	private boolean menuShown = true;
+    private boolean menuShown = true;
 
 	public GuiPresenter(GuiController controller) {
 		this.controller = controller;
 		this.gui = new Gui(controller);
-		gui.setTreeSelectionListener((e) -> this.handleTreeSelection(e));
+		gui.setTreeSelectionListener(this::handleTreeSelection);
 		this.imagefolderPanelPresenter = new ImagefolderPanelPresenter(this.gui, controller);
 	}
 

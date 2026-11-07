@@ -8,7 +8,9 @@ import main.Settings;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class FileFinderRunnable implements Runnable {
 
@@ -19,6 +21,7 @@ class FileFinderRunnable implements Runnable {
     private final Settings settings;
     private final ConcurrentResultMap resultMap;
     private List<File> collected;
+    private final Map<Long, List<File>> size2files = new HashMap<>();
 
     public FileFinderRunnable(FileFinder finder, ISearchController searchListener) {
         this.finder = finder;
@@ -27,14 +30,14 @@ class FileFinderRunnable implements Runnable {
         this.searchListener = searchListener;
         this.collected = new ArrayList<>(settings.getFileThreadRatio());
         this.interestingFilesFilter = settings.getInterestingFileFilter();
-        directoryFileFilter = pathname -> pathname.isDirectory();
+        directoryFileFilter = File::isDirectory;
     }
 
     @Override
     public void run() {
         File root = new File(settings.getRootPath());
         roamDirectory(root);
-        if (collected.size() > 0) {
+        if (!collected.isEmpty()) {
             createHashRunnable(collected);
         }
         finder.done();
@@ -42,7 +45,7 @@ class FileFinderRunnable implements Runnable {
 
     private void createHashRunnable(List<File> files) {
         HashRunnable hashRunnable = new HashRunnable(files, resultMap);
-        finder.submit(hashRunnable);
+        finder.addRunnable(hashRunnable);
     }
 
     private void roamDirectory(File directory) {
@@ -50,8 +53,9 @@ class FileFinderRunnable implements Runnable {
         File[] fileList = directory.listFiles(interestingFilesFilter);
         if (fileList != null) { //might not be accessible
             for (File file : fileList) {
-                searchListener.onInterestingFileFound(file);
                 // add and launch md5 worker if necessary
+                if (Thread.currentThread().isInterrupted())
+                    return;
                 addChecked(file);
             }
         }
@@ -59,14 +63,26 @@ class FileFinderRunnable implements Runnable {
         File[] dirs = directory.listFiles(directoryFileFilter);
         if (dirs != null) {
             for (File dir : dirs) {
+                if (Thread.currentThread().isInterrupted())
+                    return;
                 roamDirectory(dir);
             }
         }
     }
 
     private void addChecked(File file) {
+        List<File> sameSizeFiles = this.size2files.computeIfAbsent(file.length(), size -> new ArrayList<>());
+        sameSizeFiles.add(file);
+        if (sameSizeFiles.size() == 1)
+            return;
+        if (sameSizeFiles.size() == 2) {
+            collected.add(sameSizeFiles.get(0));
+            searchListener.onInterestingFileFound(sameSizeFiles.get(0));
+        }
         collected.add(file);
-        if (collected.size() == settings.getFileThreadRatio()) {
+        searchListener.onInterestingFileFound(file);
+
+        if (collected.size() >= settings.getFileThreadRatio()) {
             createHashRunnable(collected);
             collected = new ArrayList<>(settings.getFileThreadRatio());
         }

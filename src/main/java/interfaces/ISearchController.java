@@ -14,7 +14,7 @@ public interface ISearchController {
 
     void onSearchAborted();
 
-    void onInterestingFileFound(File file);
+    void onInterestingFileFound(@SuppressWarnings("unused") File file);
 
     void onInterestingFilesFoundDone();
 }
